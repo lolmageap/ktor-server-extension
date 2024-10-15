@@ -1,0 +1,5 @@
+ktor:
+  shedlock:
+    create-schema: true
+#    만약 datasource에서 driver 설정이 되어있다면 아래와 같이 설정하지 않아도 된다. <- 이건 구현해야함.
+    driver: org.postgresql.Driver
