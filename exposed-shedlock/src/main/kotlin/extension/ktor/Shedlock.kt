@@ -14,45 +14,43 @@ suspend fun <T> shedlock(
     block: suspend () -> T,
 ) {
     reactiveTransaction {
-        val now = ZonedDateTime.now(ZoneOffset.UTC)
         try {
             val resultRow = Shedlocks.selectAll()
                 .where { Shedlocks.name eq name }
                 .pessimisticLock()
                 .singleOrNull()
-                ?: insertNewShedlock(name, lockAtMostFor)
 
-            val shedLock = resultRow.toShedLock()
+            if (resultRow == null) {
+                val newShedlock = insertNewShedlock(name, lockAtMostFor)
+                newShedlock.toShedLock().lockedAt
+            } else {
+                val shedLock = resultRow.toShedLock()
+                val now = shedLock.lockedAt
 
-            if (now between shedLock.lockedAt..shedLock.lockUntil) {
-                throw RuntimeException("Already locked")
+                if (now between now..shedLock.lockUntil) {
+                    throw RuntimeException("Already locked")
+                }
+
+                Shedlocks.update({ Shedlocks.name eq name }) {
+                    it[lockedAt] = now
+                    it[lockUntil] = now + lockAtMostFor
+                }
+
+                now
             }
-
-            Shedlocks.update({ Shedlocks.name eq name }) {
-                val updatedAt = ZonedDateTime.now(ZoneOffset.UTC)
-                it[lockedAt] = updatedAt.toLocalDateTime()
-                it[lockUntil] = updatedAt.toLocalDateTime() + lockAtMostFor
-            }
-        } catch (e: IllegalStateException) {
+        } catch (e: Exception) {
             throw RuntimeException("Already locked")
         }
     }
 
-    try {
-        block.invoke()
-    } finally {
-        reactiveTransaction {
-            Shedlocks.update({ Shedlocks.name eq name }) {
-                it[lockUntil] = ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime()
-            }
-        }
-    }
+    block.invoke()
 }
 
 private fun insertNewShedlock(
     name: String,
     duration: Duration,
 ): ResultRow {
+    val now = ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime()
     Shedlocks.insert {
         it[Shedlocks.name] = name
         it[lockedAt] = now
