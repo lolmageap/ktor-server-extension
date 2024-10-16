@@ -30,34 +30,8 @@ class ShedlockTestStringSpec : StringSpec({
 
         coroutineScope {
             launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
+            for (i in 0 until 100) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
+            repeat(100) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
         }
 
         count shouldBe 1
