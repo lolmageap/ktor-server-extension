@@ -26,7 +26,7 @@ fun <T> schedule(
                 val delayTimeSeconds = ChronoUnit.SECONDS.between(now, next)
 
                 if (delayTimeSeconds > 0) delay(delayTimeSeconds * 1000)
-                else block()
+                else block().apply { delay(1000) }
             }
         }
     }
