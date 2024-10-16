@@ -1,11 +1,9 @@
 package extension.ktor
 
-import extension.ktor.Shedlocks.pessimisticLock
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
-import org.jetbrains.exposed.sql.vendors.ForUpdateOption.PostgreSQL.MODE.NO_WAIT
 import java.time.Duration
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -16,12 +14,11 @@ suspend fun <T> shedlock(
     block: suspend () -> T,
 ) {
     reactiveTransaction {
-        // 여기 인터페이스 작성하고 DBMS에 맞게 구현해야함 <-> yml 파일에서 읽어와야함.
         val now = ZonedDateTime.now(ZoneOffset.UTC)
         try {
             val resultRow = Shedlocks.selectAll()
                 .where { Shedlocks.name eq name }
-                .pessimisticLock(NO_WAIT)
+                .pessimisticLock()
                 .singleOrNull()
                 ?: insertNewShedlock(name, lockAtMostFor)
 
@@ -64,6 +61,6 @@ private fun insertNewShedlock(
 
     return Shedlocks.selectAll()
         .where { Shedlocks.name eq name }
-        .pessimisticLock(NO_WAIT)
+        .pessimisticLock()
         .single()
 }
