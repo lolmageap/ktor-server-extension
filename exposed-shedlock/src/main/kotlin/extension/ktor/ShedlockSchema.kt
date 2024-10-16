@@ -18,8 +18,8 @@ internal object Shedlocks : Table("shedlock") {
 
 internal data class Shedlock(
     val name: String,
-    val lockedAt: ZonedDateTime,
-    val lockUntil: ZonedDateTime,
+    val lockedAt: LocalDateTime,
+    val lockUntil: LocalDateTime,
 ) {
     companion object {
         fun of(
@@ -27,10 +27,11 @@ internal data class Shedlock(
         ) =
             Shedlock(
                 name = resultRow[Shedlocks.name],
-                lockedAt = resultRow[Shedlocks.lockedAt].toZonedDateTime(),
-                lockUntil = resultRow[Shedlocks.lockUntil].toZonedDateTime(),
+                lockedAt = resultRow[Shedlocks.lockedAt],
+                lockUntil = resultRow[Shedlocks.lockUntil],
             )
     }
 }
 
-private fun LocalDateTime.toZonedDateTime() = ZonedDateTime.of(this, UTC)
+private val now
+    get() = ZonedDateTime.now(UTC).toLocalDateTime()
