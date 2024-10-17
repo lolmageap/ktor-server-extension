@@ -8,15 +8,15 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 
-internal object Shedlocks : Table("shedlock") {
-    val name: Column<String> = varchar("name", 255)
+object Shedlocks : Table("shedlock") {
+    val name: Column<String> = varchar("name", 255).uniqueIndex()
     val lockedAt = datetime("locked_at").default(now)
     val lockUntil = datetime("lock_until")
 
     override val primaryKey = PrimaryKey(name)
 }
 
-internal data class Shedlock(
+data class Shedlock(
     val name: String,
     val lockedAt: LocalDateTime,
     val lockUntil: LocalDateTime,
