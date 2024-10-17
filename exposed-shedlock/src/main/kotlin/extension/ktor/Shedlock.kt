@@ -5,8 +5,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
 import java.time.Duration
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
+import java.time.LocalDateTime
 
 suspend fun <T> shedlock(
     name: String,
@@ -14,32 +13,26 @@ suspend fun <T> shedlock(
     block: suspend () -> T,
 ) {
     reactiveTransaction {
-        try {
-            val resultRow = Shedlocks.selectAll()
-                .where { Shedlocks.name eq name }
-                .pessimisticLock()
-                .singleOrNull()
+        val resultRow = Shedlocks.selectAll()
+            .where { Shedlocks.name eq name }
+            .forUpdate()
+            .singleOrNull()
 
-            if (resultRow == null) {
-                val newShedlock = insertNewShedlock(name, lockAtMostFor)
-                newShedlock.toShedLock().lockedAt
-            } else {
-                val shedLock = resultRow.toShedLock()
-                val now = shedLock.lockedAt
+        val now = LocalDateTime.now()
 
-                if (now between now..shedLock.lockUntil) {
-                    throw RuntimeException("Already locked")
-                }
+        if (resultRow == null) {
+            insertNewShedlock(name, now, lockAtMostFor)
+        } else {
+            val shedLock = resultRow.toShedLock()
 
-                Shedlocks.update({ Shedlocks.name eq name }) {
-                    it[lockedAt] = now
-                    it[lockUntil] = now + lockAtMostFor
-                }
-
-                now
+            if (now between shedLock.lockedAt..shedLock.lockUntil) {
+                throw AlreadyLockedException()
             }
-        } catch (e: Exception) {
-            throw RuntimeException("Already locked")
+
+            Shedlocks.update({ Shedlocks.name eq name }) {
+                it[lockedAt] = now
+                it[lockUntil] = now + lockAtMostFor
+            }
         }
     }
 
@@ -48,17 +41,17 @@ suspend fun <T> shedlock(
 
 private fun insertNewShedlock(
     name: String,
-    duration: Duration,
+    now: LocalDateTime,
+    lockAtMostFor: Duration,
 ): ResultRow {
-    val now = ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime()
     Shedlocks.insert {
         it[Shedlocks.name] = name
         it[lockedAt] = now
-        it[lockUntil] = now + duration
+        it[lockUntil] = now + lockAtMostFor
     }
 
     return Shedlocks.selectAll()
         .where { Shedlocks.name eq name }
-        .pessimisticLock()
+        .forUpdate()
         .single()
 }
