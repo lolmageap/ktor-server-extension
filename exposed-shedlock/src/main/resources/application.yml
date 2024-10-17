@@ -1,9 +1,0 @@
-ktor:
-  shedlock:
-    create-schema: true
-    driver: org.postgresql.Driver
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/shedlock
-    username: postgres
-    password: postgres
