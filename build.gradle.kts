@@ -9,7 +9,7 @@ plugins {
 
 allprojects {
     group = "com.github.lolmageap"
-    version = "0.0.6"
+    version = "0.0.7"
 
     repositories {
         mavenCentral()
@@ -21,9 +21,8 @@ subprojects {
     apply(plugin = "maven-publish")
 
     java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
-        }
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         withSourcesJar()
         withJavadocJar()
     }
