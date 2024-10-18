@@ -9,11 +9,6 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:5.7.2")
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
 tasks.test {
     useJUnitPlatform()
 }

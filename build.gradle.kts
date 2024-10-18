@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
@@ -11,23 +12,23 @@ plugins {
 
 allprojects {
     group = "com.github.lolmageap"
-    version = "0.0.9"
+    version = "1.0.0"
 
     repositories {
         mavenCentral()
     }
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-    withSourcesJar()
-    withJavadocJar()
-}
-
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "maven-publish")
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+        withSourcesJar()
+        withJavadocJar()
+    }
 
     dependencies {
         implementation("io.ktor:ktor-server-core-jvm")
@@ -47,9 +48,8 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs += "-Xjsr305=strict"
-            jvmTarget = "17"
+        compilerOptions  {
+            jvmTarget = JvmTarget.JVM_21
         }
     }
 }
