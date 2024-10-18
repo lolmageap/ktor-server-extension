@@ -9,23 +9,23 @@ plugins {
 
 allprojects {
     group = "com.github.lolmageap"
-    version = "0.0.7"
+    version = "0.0.9"
 
     repositories {
         mavenCentral()
     }
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    withSourcesJar()
+    withJavadocJar()
+}
+
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "maven-publish")
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-        withSourcesJar()
-        withJavadocJar()
-    }
 
     dependencies {
         implementation("io.ktor:ktor-server-core-jvm")
