@@ -6,10 +6,6 @@ plugins {
     id("io.ktor.plugin") version "3.0.0"
 }
 
-application {
-    mainClass.set("extension.ktor.ApplicationKt")
-}
-
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
@@ -26,4 +22,14 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks {
+    jar {
+        archiveFileName.set("exposed-shedlock.jar")
+    }
+
+    shadowJar {
+        enabled = false
+    }
 }

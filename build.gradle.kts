@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 val kotlinVersion: String by project
 val logbackVersion: String by project
 
@@ -9,6 +11,8 @@ plugins {
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
+    withSourcesJar()
+    withJavadocJar()
 }
 
 allprojects {
@@ -22,6 +26,7 @@ allprojects {
 
 subprojects {
     apply(plugin = "kotlin")
+    apply(plugin = "com.github.johnrengelman.shadow")
 
     dependencies {
         implementation("io.ktor:ktor-server-core-jvm")
@@ -30,9 +35,18 @@ subprojects {
     }
 }
 
+tasks {
+    shadowJar {
+        enabled = false
+    }
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
             from(components["java"])
         }
     }

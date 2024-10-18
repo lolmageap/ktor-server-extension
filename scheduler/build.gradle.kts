@@ -12,3 +12,13 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks {
+    jar {
+        archiveFileName.set("scheduler.jar")
+    }
+
+    shadowJar {
+        enabled = false
+    }
+}
