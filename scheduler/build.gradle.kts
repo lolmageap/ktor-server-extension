@@ -13,12 +13,6 @@ tasks.test {
     useJUnitPlatform()
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    withSourcesJar()
-    withJavadocJar()
-}
-
 tasks {
     jar {
         archiveFileName.set("scheduler.jar")

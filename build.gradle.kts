@@ -7,15 +7,9 @@ plugins {
     id("io.ktor.plugin") version "3.0.0"
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    withSourcesJar()
-    withJavadocJar()
-}
-
 allprojects {
     group = "com.github.lolmageap"
-    version = "0.0.4"
+    version = "0.0.5"
 
     repositories {
         mavenCentral()
@@ -25,6 +19,20 @@ allprojects {
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "maven-publish")
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+        withSourcesJar()
+        withJavadocJar()
+    }
+
+    kotlin {
+        jvmToolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
 
     dependencies {
         implementation("io.ktor:ktor-server-core-jvm")
