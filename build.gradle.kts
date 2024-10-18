@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val kotlinVersion: String by project
 val logbackVersion: String by project
 
@@ -41,6 +43,13 @@ subprojects {
                 version = project.version.toString()
                 from(components["java"])
             }
+        }
+    }
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs += "-Xjsr305=strict"
+            jvmTarget = "17"
         }
     }
 }
