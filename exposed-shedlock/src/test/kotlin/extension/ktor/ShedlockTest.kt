@@ -75,5 +75,5 @@ class ShedlockTestStringSpec : StringSpec({
     }
 })
 
-fun Int.toMinutes(): Duration = Duration.ofMinutes(this.toLong())
-fun Int.toSeconds(): Duration = Duration.ofSeconds(this.toLong())
+private fun Int.toMinutes(): Duration = Duration.ofMinutes(this.toLong())
+private fun Int.toSeconds(): Duration = Duration.ofSeconds(this.toLong())
