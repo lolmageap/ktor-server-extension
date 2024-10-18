@@ -20,6 +20,12 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:5.7.2")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    withSourcesJar()
+    withJavadocJar()
+}
+
 tasks.test {
     useJUnitPlatform()
 }
