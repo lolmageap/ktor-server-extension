@@ -16,8 +16,6 @@ dependencies {
     testImplementation("org.postgresql:postgresql:42.7.4")
     testImplementation("io.ktor:ktor-server-core:$ktorVersion")
     testImplementation("io.ktor:ktor-server-netty:$ktorVersion")
-    testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
-    testImplementation("io.kotest:kotest-assertions-core:5.7.2")
 }
 
 tasks.test {
