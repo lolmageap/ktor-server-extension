@@ -58,11 +58,11 @@ class ShedlockTestStringSpec : StringSpec({
 
     "Verify that shedlock ensures the logic is executed only once when multiple applications start simultaneously with existing data in the database" {
         val name = "test"
-        val duration = 1.toSeconds()
+        val duration = 1.toMinutes()
         var count = 0
 
-        shedlock(name, duration) { count += 1 }
-        delay(1000)
+        shedlock(name, 100.toMilliSeconds()) { count += 1 }
+        delay(100)
 
         coroutineScope {
             repeat(50) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
@@ -75,5 +75,5 @@ class ShedlockTestStringSpec : StringSpec({
     }
 })
 
-private fun Int.toMinutes(): Duration = Duration.ofMinutes(this.toLong())
-private fun Int.toSeconds(): Duration = Duration.ofSeconds(this.toLong())
+fun Int.toMinutes(): Duration = Duration.ofMinutes(this.toLong())
+fun Int.toMilliSeconds(): Duration = Duration.ofMillis(this.toLong())
