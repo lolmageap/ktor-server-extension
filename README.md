@@ -13,8 +13,8 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.lolmageap:ktor-extension-scheduler:1.0.0")
-    implementation("com.github.lolmageap:ktor-extension-exposed-shedlock:1.0.0")
+    implementation("com.github.lolmageap:ktor-extension:scheduler:1.0.0")
+    implementation("com.github.lolmageap:ktor-extension:exposed-shedlock:1.0.0")
 }
 ```
 
