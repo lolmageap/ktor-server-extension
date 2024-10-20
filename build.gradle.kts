@@ -15,6 +15,7 @@ allprojects {
     version = "1.0.1"
 
     repositories {
+        gradlePluginPortal()
         mavenCentral()
     }
 }
@@ -31,12 +32,13 @@ subprojects {
     }
 
     dependencies {
-        implementation("io.ktor:ktor-server-core-jvm")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-        testImplementation("io.ktor:ktor-server-test-host-jvm")
-        testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
-        testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
-        testImplementation("io.kotest:kotest-assertions-core:5.7.2")
+        implementation(Ktor.server.core)
+        implementation(Kotlin.stdlib.jdk8)
+        implementation(Ktor.plugins.serialization.jackson)
+        testImplementation(Ktor.server.testHost)
+        testImplementation(Kotlin.test.junit)
+        testImplementation(Testing.Kotest.runner.junit5)
+        testImplementation(Testing.Kotest.assertions.core)
     }
 
     publishing {

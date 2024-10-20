@@ -7,9 +7,8 @@ plugins {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core:$ktorVersion")
-    implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-jackson-jvm")
+    implementation(Ktor.server.core)
+    implementation(Ktor.server.netty)
 }
 
 tasks.test {
