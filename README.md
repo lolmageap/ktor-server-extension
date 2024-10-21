@@ -13,8 +13,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.lolmageap.ktor-extension:scheduler:1.0.0")
-    implementation("com.github.lolmageap.ktor-extension:exposed-shedlock:1.0.0")
+    implementation("com.github.lolmageap.ktor-extensions:http:1.0.0")
+    implementation("com.github.lolmageap.ktor-extensions:scheduler:1.0.0")
+    implementation("com.github.lolmageap.ktor-extensions:exposed-shedlock:1.0.0")
 }
 ```
 
@@ -71,5 +72,19 @@ fun Application.module() {
     ) {
         println("Hello, world!")
     }
+}
+```
+
+### HTTP
+
+This extension provides a simple way to handle HTTP requests in the Ktor framework.
+
+```kotlin
+get("/http") {
+    val model = call.getQueryParams<DataClass>()
+}
+
+get("/http/{id}") {
+    val id = call.pathVariables["id"]
 }
 ```
