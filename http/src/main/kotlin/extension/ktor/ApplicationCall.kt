@@ -9,7 +9,7 @@ val mapper = jacksonObjectMapper()
 val ApplicationCall.pathVariable
     get() = PathVariable(this)
 
-inline fun <reified T : Any> ApplicationCall.queryParams(): T =
+inline fun <reified T : Any> ApplicationCall.getQueryParams(): T =
     this.request.queryParameters.toClass()
 
 inline fun <reified T : Any> Parameters.toClass(): T {
