@@ -7,10 +7,22 @@ plugins {
 }
 
 dependencies {
-    implementation(Ktor.server.core)
-    implementation(Ktor.server.netty)
+    implementation("io.ktor:ktor-serialization-jackson-jvm")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
 }
 
 tasks.test {
     useJUnitPlatform()
+}
+
+
+tasks {
+    jar {
+        archiveFileName.set("http.jar")
+    }
+
+    shadowJar {
+        enabled = false
+    }
 }

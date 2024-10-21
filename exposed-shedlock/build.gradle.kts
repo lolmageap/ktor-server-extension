@@ -7,13 +7,12 @@ plugins {
 }
 
 dependencies {
-    implementation(JetBrains.exposed.core)
-    implementation(JetBrains.exposed.dao)
-    implementation(JetBrains.exposed.jdbc)
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
-
-    testImplementation(Ktor.server.core)
-    testImplementation(Ktor.server.netty)
+    testImplementation("io.ktor:ktor-server-core:$ktorVersion")
+    testImplementation("io.ktor:ktor-server-netty:$ktorVersion")
     testImplementation("com.zaxxer:HikariCP:5.1.0")
     testImplementation("org.postgresql:postgresql:42.7.4")
 }

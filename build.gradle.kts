@@ -32,13 +32,14 @@ subprojects {
     }
 
     dependencies {
-        implementation(Ktor.server.core)
-        implementation(Kotlin.stdlib.jdk8)
-        implementation(Ktor.plugins.serialization.jackson)
-        testImplementation(Ktor.server.testHost)
-        testImplementation(Kotlin.test.junit)
-        testImplementation(Testing.Kotest.runner.junit5)
-        testImplementation(Testing.Kotest.assertions.core)
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+        implementation("io.ktor:ktor-server-core-jvm")
+        implementation("io.ktor:ktor-serialization-jvm")
+        implementation("ch.qos.logback:logback-classic:$logbackVersion")
+        testImplementation("io.ktor:ktor-server-test-host-jvm")
+        testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+        testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
+        testImplementation("io.kotest:kotest-assertions-core:5.7.2")
     }
 
     publishing {
