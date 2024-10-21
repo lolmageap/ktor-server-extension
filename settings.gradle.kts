@@ -1,4 +1,4 @@
-rootProject.name = "ktor-extension"
+rootProject.name = "ktor-extensions"
 
 plugins {
     id("de.fayard.refreshVersions") version "0.60.5"
