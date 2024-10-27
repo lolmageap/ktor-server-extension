@@ -13,6 +13,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Duration
+import java.util.concurrent.atomic.AtomicInteger
 
 class ShedlockTestStringSpec : StringSpec({
     beforeTest {
@@ -43,35 +44,34 @@ class ShedlockTestStringSpec : StringSpec({
     "Verify that shedlock ensures the logic is executed only once when multiple applications start simultaneously with no existing data in the database" {
         val name = "test"
         val duration = 1.toMinutes()
-        var count = 0
+        val count = AtomicInteger(0)
 
         coroutineScope {
-            launch { runCatching { shedlock(name, duration) { count += 1 } } }
-            repeat(50) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
-            repeat(50) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
-            repeat(50) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
-            repeat(50) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
+            repeat(50) { launch { runCatching { shedlock(name, duration) { count.getAndIncrement() } } } }
+            repeat(50) { launch { runCatching { shedlock(name, duration) { count.getAndIncrement() } } } }
+            repeat(50) { launch { runCatching { shedlock(name, duration) { count.getAndIncrement() } } } }
+            repeat(50) { launch { runCatching { shedlock(name, duration) { count.getAndIncrement() } } } }
         }
 
-        count shouldBe 1
+        count.get() shouldBe 1
     }
 
     "Verify that shedlock ensures the logic is executed only once when multiple applications start simultaneously with existing data in the database" {
         val name = "test"
         val duration = 1.toMinutes()
-        var count = 0
+        val count = AtomicInteger(0)
 
-        shedlock(name, 100.toMilliSeconds()) { count += 1 }
+        shedlock(name, 100.toMilliSeconds()) { count.getAndIncrement() }
         delay(100)
 
         coroutineScope {
-            repeat(50) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
-            repeat(50) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
-            repeat(50) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
-            repeat(50) { launch { runCatching { shedlock(name, duration) { count += 1 } } } }
+            repeat(50) { launch { runCatching { shedlock(name, duration) { count.getAndIncrement() } } } }
+            repeat(50) { launch { runCatching { shedlock(name, duration) { count.getAndIncrement() } } } }
+            repeat(50) { launch { runCatching { shedlock(name, duration) { count.getAndIncrement() } } } }
+            repeat(50) { launch { runCatching { shedlock(name, duration) { count.getAndIncrement() } } } }
         }
 
-        count shouldBe 2
+        count.get() shouldBe 2
     }
 })
 
