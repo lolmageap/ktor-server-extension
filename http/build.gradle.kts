@@ -17,7 +17,6 @@ tasks.test {
     useJUnitPlatform()
 }
 
-
 tasks {
     jar {
         archiveFileName.set("http.jar")
