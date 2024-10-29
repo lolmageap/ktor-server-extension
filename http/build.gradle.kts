@@ -7,7 +7,8 @@ plugins {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-serialization-jackson-jvm")
+    implementation("io.ktor:ktor-serialization-jackson-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
 }

@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
-val logbackVersion: String by project
+val ktorVersion: String by project
 
 plugins {
     kotlin("jvm") version "2.0.21"
@@ -33,9 +33,7 @@ subprojects {
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-        implementation("io.ktor:ktor-server-core-jvm")
-        implementation("io.ktor:ktor-serialization-jvm")
-        implementation("ch.qos.logback:logback-classic:$logbackVersion")
+        implementation("io.ktor:ktor-serialization-jvm:$ktorVersion")
         testImplementation("io.ktor:ktor-server-test-host-jvm")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
         testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
