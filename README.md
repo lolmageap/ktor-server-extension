@@ -6,16 +6,28 @@ This is a simple extension for the Ktor framework that provides an easy way to u
 
 ## Dependencies
 
+It requires JDK version 17 or higher
+
+add the following to your build.gradle.kts file:
+
 ```kotlin
 repositories {
     mavenCentral()
     maven { url = uri("https://jitpack.io") }
 }
 
+Your ktor version is 2.x:
 dependencies {
-    implementation("com.github.lolmageap.ktor-server-extensions:http:0.0.1")
-    implementation("com.github.lolmageap.ktor-server-extensions:scheduler:0.0.1")
-    implementation("com.github.lolmageap.ktor-server-extensions:exposed-shedlock:0.0.1")
+    implementation("com.github.lolmageap.ktor-server-extensions:http:0.0.2")
+    implementation("com.github.lolmageap.ktor-server-extensions:scheduler:0.0.2")
+    implementation("com.github.lolmageap.ktor-server-extensions:exposed-shedlock:0.0.2")
+}
+
+Your ktor version is 3.x:
+dependencies {
+    implementation("com.github.lolmageap.ktor-server-extensions:http:0.0.3")
+    implementation("com.github.lolmageap.ktor-server-extensions:scheduler:0.0.3")
+    implementation("com.github.lolmageap.ktor-server-extensions:exposed-shedlock:0.0.3")
 }
 ```
 
