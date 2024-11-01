@@ -16,18 +16,9 @@ repositories {
     maven { url = uri("https://jitpack.io") }
 }
 
-Your ktor version is 2.x:
 dependencies {
-    implementation("com.github.lolmageap.ktor-server-extensions:http:0.0.2")
-    implementation("com.github.lolmageap.ktor-server-extensions:scheduler:0.0.2")
-    implementation("com.github.lolmageap.ktor-server-extensions:exposed-shedlock:0.0.2")
-}
-
-Your ktor version is 3.x:
-dependencies {
-    implementation("com.github.lolmageap.ktor-server-extensions:http:0.0.3")
-    implementation("com.github.lolmageap.ktor-server-extensions:scheduler:0.0.3")
-    implementation("com.github.lolmageap.ktor-server-extensions:exposed-shedlock:0.0.3")
+    implementation("com.github.lolmageap.ktor-server-extensions:scheduler:1.0.0")
+    implementation("com.github.lolmageap.ktor-server-extensions:exposed-shedlock:1.0.0")
 }
 ```
 
@@ -84,19 +75,5 @@ fun Application.module() {
     ) {
         println("Hello, world!")
     }
-}
-```
-
-### HTTP
-
-This extension provides a simple way to handle HTTP requests in the Ktor framework.
-
-```kotlin
-get("/http") {
-    val model = call.getQueryParams<DataClass>()
-}
-
-get("/http/{id}") {
-    val id = call.pathVariables["id"]
 }
 ```

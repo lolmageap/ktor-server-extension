@@ -12,7 +12,7 @@ plugins {
 
 allprojects {
     group = "com.github.lolmageap"
-    version = "0.0.1"
+    version = "1.0.0"
 
     repositories {
         gradlePluginPortal()
@@ -33,7 +33,6 @@ subprojects {
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-        implementation("io.ktor:ktor-serialization-jvm:$ktorVersion")
         testImplementation("io.ktor:ktor-server-test-host-jvm")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
         testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
