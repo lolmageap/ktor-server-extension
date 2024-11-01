@@ -32,6 +32,7 @@ subprojects {
     }
 
     dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
         testImplementation("io.ktor:ktor-server-test-host-jvm")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
