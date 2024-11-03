@@ -17,8 +17,8 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.lolmageap.ktor-server-extension:scheduler:1.0.0")
-    implementation("com.github.lolmageap.ktor-server-extension:exposed-shedlock:1.0.0")
+    implementation("com.github.lolmageap.ktor-server-extension:scheduler:1.0.1")
+    implementation("com.github.lolmageap.ktor-server-extension:exposed-shedlock:1.0.1")
 }
 ```
 
