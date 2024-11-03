@@ -4,8 +4,6 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,11 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class ShedlockTestStringSpec : StringSpec({
     beforeTest {
-        embeddedServer(Netty).start()
-
         val dataSource = HikariDataSource(
             HikariConfig().also {
-                it.jdbcUrl = "jdbc:postgresql://localhost:5432/shedlock"
+                it.jdbcUrl = "jdbc:postgresql://localhost:5432/cherhy"
                 it.username = "postgres"
                 it.password = "postgres"
                 it.validate()

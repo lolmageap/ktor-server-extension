@@ -7,7 +7,7 @@ val ktorVersion: String by project
 plugins {
     kotlin("jvm") version "2.0.21"
     id("maven-publish")
-    id("io.ktor.plugin") version "3.0.0"
+    id("io.ktor.plugin") version "3.0.0" apply false
 }
 
 allprojects {
@@ -54,11 +54,5 @@ subprojects {
         compilerOptions  {
             jvmTarget = JvmTarget.JVM_17
         }
-    }
-}
-
-tasks {
-    shadowJar {
-        enabled = false
     }
 }

@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.0.21"
-    id("io.ktor.plugin") version "3.0.0"
+    id("io.ktor.plugin") version "3.0.0" apply false
 }
 
 dependencies {
@@ -16,7 +16,7 @@ tasks {
         archiveFileName.set("scheduler.jar")
     }
 
-    shadowJar {
-        enabled = false
-    }
+//    shadowJar {
+//        enabled = false
+//    }
 }
