@@ -1,13 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val kotlinVersion: String by project
-val ktorVersion: String by project
-
 plugins {
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version PluginVersions.JVM_VERSION
     id("maven-publish")
-    id("io.ktor.plugin") version "3.0.0"
+    id("io.ktor.plugin") version PluginVersions.KTOR_PLUGIN_VERSION
 }
 
 allprojects {
@@ -32,11 +29,11 @@ subprojects {
     }
 
     dependencies {
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-        testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
-        testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
-        testImplementation("io.kotest:kotest-assertions-core:5.7.2")
+        implementation(Dependencies.KOTLIN_COROUTINES)
+        implementation(Dependencies.KOTLIN_STD_LIB)
+        testImplementation(Dependencies.KOTLIN_TEST_JUNIT)
+        testImplementation(Dependencies.KOTEST_RUNNER_JUNIT5)
+        testImplementation(Dependencies.KOTEST_ASSERTIONS_CORE)
     }
 
     publishing {

@@ -1,18 +1,16 @@
-val exposedVersion : String by project
-val ktorVersion : String by project
-
 plugins {
-    kotlin("jvm") version "2.0.21"
-    id("io.ktor.plugin") version "3.0.0"
+    kotlin("jvm") version PluginVersions.JVM_VERSION
+    id("io.ktor.plugin") version PluginVersions.KTOR_PLUGIN_VERSION
 }
 
 dependencies {
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
-    testImplementation("com.zaxxer:HikariCP:5.1.0")
-    testImplementation("org.postgresql:postgresql:42.7.4")
+    implementation(Dependencies.EXPOSED_CORE)
+    implementation(Dependencies.EXPOSED_DAO)
+    implementation(Dependencies.EXPOSED_JAVA_TIME)
+    implementation(Dependencies.EXPOSED_JDBC)
+
+    testImplementation(Dependencies.HIKARI_CP)
+    testImplementation(Dependencies.POSTGRESQL)
 }
 
 tasks.test {
