@@ -4,12 +4,20 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
-import java.time.Duration
 import java.time.LocalDateTime
+import kotlin.time.toJavaDuration
 
 suspend fun <T> shedlock(
     name: String,
-    lockAtMostFor: Duration,
+    lockAtMostFor: kotlin.time.Duration,
+    block: suspend () -> T,
+) {
+    shedlock(name, lockAtMostFor.toJavaDuration(), block)
+}
+
+suspend fun <T> shedlock(
+    name: String,
+    lockAtMostFor: java.time.Duration,
     block: suspend () -> T,
 ) {
     reactiveTransaction {
@@ -42,7 +50,7 @@ suspend fun <T> shedlock(
 private fun insertNewShedlock(
     name: String,
     now: LocalDateTime,
-    lockAtMostFor: Duration,
+    lockAtMostFor: java.time.Duration,
 ): ResultRow {
     Shedlocks.insert {
         it[Shedlocks.name] = name
