@@ -1,5 +1,6 @@
-package extension.ktor
+package scheduler
 
+import extension.ktor.schedule
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.StringSpec
 

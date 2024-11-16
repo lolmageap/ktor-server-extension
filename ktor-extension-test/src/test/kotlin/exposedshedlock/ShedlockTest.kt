@@ -1,7 +1,9 @@
-package extension.ktor
+package exposedshedlock
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import extension.ktor.Shedlocks
+import extension.ktor.shedlock
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.coroutineScope
