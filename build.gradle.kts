@@ -63,7 +63,6 @@ subprojects {
         }
 
         shadowJar {
-            archiveClassifier = ""
             archiveFileName = "${project.name}.jar"
             exclude("kotlin/**")
             exclude("kotlinx/**")
