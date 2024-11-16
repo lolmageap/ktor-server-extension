@@ -65,7 +65,7 @@ subprojects {
         }
 
         shadowJar {
-            archiveFileName.set("${project.name}.jar")
+            archiveFileName.set("${project.name}-all.jar")
         }
 
         build {
