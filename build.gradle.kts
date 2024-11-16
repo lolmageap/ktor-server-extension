@@ -53,4 +53,10 @@ subprojects {
             jvmTarget = JvmTarget.JVM_17
         }
     }
+
+    tasks {
+        build {
+            dependsOn(shadowJar)
+        }
+    }
 }
