@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -44,8 +43,9 @@ subprojects {
                     groupId = project.group.toString()
                     artifactId = project.name
                     version = project.version.toString()
-                    from(components["java"])
-                    artifact(tasks.named<ShadowJar>("shadowJar"))
+                    artifact(tasks["shadowJar"])
+                    artifact(tasks["sourcesJar"])
+                    artifact(tasks["javadocJar"])
                 }
             }
         }
@@ -63,15 +63,12 @@ subprojects {
         }
 
         shadowJar {
-            archiveFileName.set("${project.name}.jar")
+            archiveClassifier = ""
+            archiveFileName = "${project.name}.jar"
         }
 
         build {
             dependsOn(shadowJar)
         }
     }
-}
-
-tasks.jar {
-    enabled = false
 }
