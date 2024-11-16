@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version PluginVersions.JVM_VERSION
-    id("io.ktor.plugin") version PluginVersions.KTOR_PLUGIN_VERSION
+    kotlin(Plugins.JVM) version PluginVersions.JVM_VERSION
+    id(Plugins.SHADOW_JAR) version PluginVersions.SHADOW_JAR_VERSION
 }
 
 dependencies {
@@ -13,10 +13,15 @@ tasks.test {
 
 tasks {
     jar {
-        archiveFileName.set("scheduler.jar")
+        enabled = false
     }
 
     shadowJar {
-        enabled = false
+        enabled = true
+        archiveFileName.set("scheduler.jar")
+    }
+
+    build {
+        dependsOn(shadowJar)
     }
 }

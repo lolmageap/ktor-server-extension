@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version PluginVersions.JVM_VERSION
-    id("io.ktor.plugin") version PluginVersions.KTOR_PLUGIN_VERSION
+    kotlin(Plugins.JVM) version PluginVersions.JVM_VERSION
+    id(Plugins.SHADOW_JAR) version PluginVersions.SHADOW_JAR_VERSION
 }
 
 dependencies {
@@ -8,9 +8,6 @@ dependencies {
     implementation(Dependencies.EXPOSED_DAO)
     implementation(Dependencies.EXPOSED_JAVA_TIME)
     implementation(Dependencies.EXPOSED_JDBC)
-
-    testImplementation(Dependencies.HIKARI_CP)
-    testImplementation(Dependencies.POSTGRESQL)
 }
 
 tasks.test {
@@ -19,10 +16,15 @@ tasks.test {
 
 tasks {
     jar {
-        archiveFileName.set("exposed-shedlock.jar")
+        enabled = false
     }
 
     shadowJar {
-        enabled = false
+        enabled = true
+        archiveFileName.set("exposed-shedlock.jar")
+    }
+
+    build {
+        dependsOn(shadowJar)
     }
 }
