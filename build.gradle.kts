@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -44,7 +45,7 @@ subprojects {
                     artifactId = project.name
                     version = project.version.toString()
                     from(components["java"])
-                    artifact(tasks.shadowJar)
+                    artifact(tasks.named<ShadowJar>("shadowJar"))
                 }
             }
         }
