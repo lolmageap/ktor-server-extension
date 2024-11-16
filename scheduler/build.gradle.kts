@@ -10,18 +10,3 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
-
-tasks {
-    jar {
-        enabled = false
-    }
-
-    shadowJar {
-        enabled = true
-        archiveFileName.set("scheduler.jar")
-    }
-
-    build {
-        dependsOn(shadowJar)
-    }
-}

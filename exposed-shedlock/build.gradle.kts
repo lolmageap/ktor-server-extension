@@ -13,18 +13,3 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
-
-tasks {
-    jar {
-        enabled = false
-    }
-
-    shadowJar {
-        enabled = true
-        archiveFileName.set("exposed-shedlock.jar")
-    }
-
-    build {
-        dependsOn(shadowJar)
-    }
-}

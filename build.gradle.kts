@@ -58,12 +58,16 @@ subprojects {
     }
 
     tasks {
+        jar {
+            enabled = false
+        }
+
+        shadowJar {
+            archiveFileName.set("${project.name}.jar")
+        }
+
         build {
             dependsOn(shadowJar)
         }
     }
-}
-
-tasks.jar {
-    enabled = false
 }
