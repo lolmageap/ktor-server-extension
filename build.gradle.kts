@@ -20,6 +20,7 @@ allprojects {
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "maven-publish")
+    apply(plugin = "com.github.johnrengelman.shadow")
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -43,6 +44,7 @@ subprojects {
                     artifactId = project.name
                     version = project.version.toString()
                     from(components["java"])
+                    artifact(tasks.shadowJar)
                 }
             }
         }
