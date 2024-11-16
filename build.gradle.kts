@@ -62,3 +62,7 @@ subprojects {
         }
     }
 }
+
+tasks.jar {
+    enabled = false
+}
