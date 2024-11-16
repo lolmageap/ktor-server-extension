@@ -45,9 +45,7 @@ subprojects {
                     artifactId = project.name
                     version = project.version.toString()
                     from(components["java"])
-                    artifact(tasks.named<ShadowJar>("shadowJar")) {
-                        classifier = "all"
-                    }
+                    artifact(tasks.named<ShadowJar>("shadowJar"))
                 }
             }
         }
@@ -65,11 +63,15 @@ subprojects {
         }
 
         shadowJar {
-            archiveFileName.set("${project.name}-all.jar")
+            archiveFileName.set("${project.name}.jar")
         }
 
         build {
             dependsOn(shadowJar)
         }
     }
+}
+
+tasks.jar {
+    enabled = false
 }
