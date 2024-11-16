@@ -45,7 +45,9 @@ subprojects {
                     artifactId = project.name
                     version = project.version.toString()
                     from(components["java"])
-                    artifact(tasks.named<ShadowJar>("shadowJar"))
+                    artifact(tasks.named<ShadowJar>("shadowJar")) {
+                        classifier = "all"
+                    }
                 }
             }
         }
