@@ -17,8 +17,8 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.lolmageap.ktor-server-extension:scheduler:1.0.1")
-    implementation("com.github.lolmageap.ktor-server-extension:exposed-shedlock:1.0.1")
+    implementation("com.github.lolmageap.ktor-server-extension:scheduler:1.0.2")
+    implementation("com.github.lolmageap.ktor-server-extension:exposed-shedlock:1.0.2")
 }
 ```
 
@@ -67,6 +67,18 @@ fun Application.module() {
 #### Usage
 
 To use ShedLock, specify a lock name and a duration for how long the lock should be held.
+
+```kotlin
+fun Application.module() {
+    shedlock(
+        name = "shedlock", lockAtMostFor = 5.minutes,
+    ) {
+        println("Hello, world!")
+    }
+}
+```
+
+or
 
 ```kotlin
 fun Application.module() {
