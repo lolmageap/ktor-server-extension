@@ -31,7 +31,7 @@ subprojects {
 
     dependencies {
         implementation(Dependencies.KOTLIN_COROUTINES)
-        implementation(Dependencies.KOTLIN_STD_LIB)
+        compileOnly(Dependencies.KOTLIN_STD_LIB)
     }
 
     if (project.name == "ktor-extension-test") {
@@ -65,6 +65,9 @@ subprojects {
         shadowJar {
             archiveClassifier = ""
             archiveFileName = "${project.name}.jar"
+            exclude("kotlin/**")
+            exclude("kotlinx/**")
+            exclude("org/**")
         }
 
         build {

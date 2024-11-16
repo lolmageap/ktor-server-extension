@@ -4,10 +4,10 @@ plugins {
 }
 
 dependencies {
-    implementation(Dependencies.EXPOSED_CORE)
-    implementation(Dependencies.EXPOSED_DAO)
-    implementation(Dependencies.EXPOSED_JAVA_TIME)
-    implementation(Dependencies.EXPOSED_JDBC)
+    compileOnly(Dependencies.EXPOSED_CORE)
+    compileOnly(Dependencies.EXPOSED_DAO)
+    compileOnly(Dependencies.EXPOSED_JAVA_TIME)
+    compileOnly(Dependencies.EXPOSED_JDBC)
 }
 
 tasks.test {

@@ -10,3 +10,7 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+tasks.shadowJar {
+    include("com/**")
+}
