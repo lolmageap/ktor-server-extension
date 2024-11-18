@@ -5,12 +5,10 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
 import java.time.LocalDateTime
-import java.time.ZoneOffset.UTC
-import java.time.ZonedDateTime
 
 object Shedlocks : Table("shedlock") {
     val name: Column<String> = varchar("name", 255).uniqueIndex()
-    val lockedAt = datetime("locked_at").default(now)
+    val lockedAt = datetime("locked_at").default(LocalDateTime.now())
     val lockUntil = datetime("lock_until")
 
     override val primaryKey = PrimaryKey(name)
@@ -32,6 +30,3 @@ data class Shedlock(
             )
     }
 }
-
-private val now
-    get() = ZonedDateTime.now(UTC).toLocalDateTime()
