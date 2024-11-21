@@ -15,5 +15,6 @@ object Dependencies {
 
     const val CRON_UTILS = "com.cronutils:cron-utils:${DependencyVersions.CRON_UTILS_VERSION}"
 
-    const val LETTUCE_CORE = "io.lettuce.core:lettuce-core:${DependencyVersions.LETTUCE_VERSION}"
+    const val LETTUCE_CORE = "io.lettuce:lettuce-core:${DependencyVersions.LETTUCE_VERSION}"
+    const val REDISSON = "org.redisson:redisson:${DependencyVersions.REDISSON_VERSION}"
 }

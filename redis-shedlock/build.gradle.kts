@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(Dependencies.LETTUCE_CORE)
+    implementation(Dependencies.REDISSON)
 }
 
 tasks.test {

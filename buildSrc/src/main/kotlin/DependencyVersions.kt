@@ -11,4 +11,5 @@ object DependencyVersions {
 
     const val CRON_UTILS_VERSION = "9.2.1"
     const val LETTUCE_VERSION = "6.5.0.RELEASE"
+    const val REDISSON_VERSION = "3.39.0"
 }
