@@ -10,7 +10,7 @@ import kotlin.time.toJavaDuration
 suspend fun <T> shedlock(
     name: String,
     lockAtMostFor: kotlin.time.Duration,
-    resetLockUntilAfterComplete: Boolean = false,
+    resetLockUntilAfterComplete: Boolean = true,
     block: suspend () -> T,
 ) {
     shedlock(name, lockAtMostFor.toJavaDuration(), resetLockUntilAfterComplete, block)
@@ -19,7 +19,7 @@ suspend fun <T> shedlock(
 suspend fun <T> shedlock(
     name: String,
     lockAtMostFor: java.time.Duration,
-    resetLockUntilAfterComplete: Boolean = false,
+    resetLockUntilAfterComplete: Boolean = true,
     block: suspend () -> T,
 ) {
     reactiveTransaction {
