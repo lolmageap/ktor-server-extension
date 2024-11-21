@@ -10,14 +10,16 @@ import kotlin.time.toJavaDuration
 suspend fun <T> shedlock(
     name: String,
     lockAtMostFor: kotlin.time.Duration,
+    resetLockUntilAfterComplete: Boolean = false,
     block: suspend () -> T,
 ) {
-    shedlock(name, lockAtMostFor.toJavaDuration(), block)
+    shedlock(name, lockAtMostFor.toJavaDuration(), resetLockUntilAfterComplete, block)
 }
 
 suspend fun <T> shedlock(
     name: String,
     lockAtMostFor: java.time.Duration,
+    resetLockUntilAfterComplete: Boolean = false,
     block: suspend () -> T,
 ) {
     reactiveTransaction {
@@ -45,6 +47,14 @@ suspend fun <T> shedlock(
     }
 
     block.invoke()
+
+    if (resetLockUntilAfterComplete) {
+        reactiveTransaction {
+            Shedlocks.update({ Shedlocks.name eq name }) {
+                it[lockUntil] = LocalDateTime.now()
+            }
+        }
+    }
 }
 
 private fun insertNewShedlock(
