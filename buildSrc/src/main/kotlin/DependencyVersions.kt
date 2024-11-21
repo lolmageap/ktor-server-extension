@@ -10,4 +10,5 @@ object DependencyVersions {
     const val HIKARI_CP_VERSION = "5.1.0"
 
     const val CRON_UTILS_VERSION = "9.2.1"
+    const val LETTUCE_VERSION = "6.5.0.RELEASE"
 }

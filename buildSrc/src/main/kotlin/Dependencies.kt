@@ -14,4 +14,6 @@ object Dependencies {
     const val POSTGRESQL = "org.postgresql:postgresql:${DependencyVersions.POSTGRESQL_VERSION}"
 
     const val CRON_UTILS = "com.cronutils:cron-utils:${DependencyVersions.CRON_UTILS_VERSION}"
+
+    const val LETTUCE_CORE = "io.lettuce.core:lettuce-core:${DependencyVersions.LETTUCE_VERSION}"
 }
