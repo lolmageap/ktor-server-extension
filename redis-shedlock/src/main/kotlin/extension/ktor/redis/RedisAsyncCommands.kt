@@ -1,4 +1,4 @@
-package extension.ktor
+package extension.ktor.redis
 
 import io.lettuce.core.RedisFuture
 import kotlin.coroutines.resume

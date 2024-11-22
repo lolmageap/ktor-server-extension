@@ -1,4 +1,4 @@
-package extension.ktor
+package extension.ktor.redis
 
 import java.time.LocalDateTime
 
