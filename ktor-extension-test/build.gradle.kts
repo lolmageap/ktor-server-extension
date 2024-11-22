@@ -6,7 +6,9 @@ plugins {
 dependencies {
     implementation(project(":scheduler"))
     implementation(project(":exposed-shedlock"))
+    implementation(project(":redis-shedlock"))
 
+    testImplementation(Dependencies.LETTUCE_CORE)
     testImplementation(Dependencies.HIKARI_CP)
     testImplementation(Dependencies.POSTGRESQL)
     testImplementation(Dependencies.EXPOSED_DAO)
