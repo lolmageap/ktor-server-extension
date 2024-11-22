@@ -1,6 +1,8 @@
-package extension.ktor
+package extension.ktor.redis
 
 import io.lettuce.core.RedisClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.redisson.Redisson
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import kotlin.time.toJavaDuration
@@ -21,17 +23,21 @@ suspend fun <T> shedlock(
     resetLockUntilAfterComplete: Boolean = true,
     block: suspend () -> T,
 ) {
-    val redisAsyncCommands = RedisClient.create().connect().async()
     val redisLock = Redisson.create().getLock(SHEDLOCK_PREFIX + name)
 
-    if (redisLock.isLocked) throw AlreadyLockedException()
-
-    redisLock.lock(lockAtMostFor.toMillis(), MILLISECONDS)
-
     try {
-        block()
+        val isLocked =
+            withContext(Dispatchers.IO) {
+                redisLock.tryLockAsync(lockAtMostFor.toMillis(), MILLISECONDS).get()
+            }
+
+        if (isLocked) throw AlreadyLockedException()
+        block.invoke()
+    } catch (e: Exception) {
+        redisLock.unlockAsync()
+        throw e
     } finally {
-        if (resetLockUntilAfterComplete) redisLock.unlock()
+        if (resetLockUntilAfterComplete) redisLock.unlockAsync()
     }
 }
 
