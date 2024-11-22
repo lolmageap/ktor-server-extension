@@ -1,4 +1,4 @@
-package extension.ktor
+package extension.ktor.exposed
 
 import java.time.LocalDateTime
 

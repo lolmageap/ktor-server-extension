@@ -1,4 +1,4 @@
-package extension.ktor
+package extension.ktor.exposed
 
 import org.jetbrains.exposed.sql.ResultRow
 

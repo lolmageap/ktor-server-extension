@@ -1,4 +1,4 @@
-package extension.ktor
+package extension.ktor.redis
 
 class AlreadyLockedException : RuntimeException() {
     override val message: String

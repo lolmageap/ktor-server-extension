@@ -2,8 +2,8 @@ package exposedshedlock
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import extension.ktor.Shedlocks
-import extension.ktor.shedlock
+import extension.ktor.exposed.Shedlocks
+import extension.ktor.redis.shedlock
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.coroutineScope
@@ -15,7 +15,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Duration
 import java.util.concurrent.atomic.AtomicInteger
 
-class ShedlockTestStringSpec : StringSpec({
+class ExposedShedlockTest : StringSpec({
     beforeTest {
         val dataSource = HikariDataSource(
             HikariConfig().also {
