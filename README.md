@@ -31,7 +31,7 @@ duplicate executions in distributed setups.
 ```kotlin
 fun Application.module() {
     schedule("0 0 0 * * *") {
-        shedlock("shedlock", Duration.ofMinutes(5)) {
+        shedlock("shedlock", 5.minutes) {
             println("Hello, world!")
         }
     }
