@@ -50,7 +50,7 @@ fun Application.module() {
 }
 ```
 
-### Shedlock
+### Exposed Shedlock
 
 This extension offers an easy way to integrate ShedLock for managing distributed locks in the Ktor framework.
 
@@ -89,3 +89,32 @@ fun Application.module() {
     }
 }
 ```
+
+## TODO
+
+- [ ] Add Redis Shedlock To Redisson
+- [ ] Add Redis Distributed Lock To Redisson - SpinLock, RedLock
+
+### Redis Shedlock
+
+#### Configuration
+
+Before using ShedLock, you need to create the necessary schema:
+
+```kotlin
+fun Application.module() {
+    RedissonClientHolder.redissonClient = Redisson.create()
+}
+```
+
+```kotlin
+fun Application.module() {
+    shedlock(
+        name = "shedlock", lockAtMostFor = 5.minutes,
+    ) {
+        println("Hello, world!")
+    }
+}
+```
+
+### Redis Distributed Lock
