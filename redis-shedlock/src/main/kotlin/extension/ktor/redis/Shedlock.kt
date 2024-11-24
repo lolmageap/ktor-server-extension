@@ -1,9 +1,7 @@
 package extension.ktor.redis
 
-import io.lettuce.core.RedisClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.redisson.Redisson
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import kotlin.time.toJavaDuration
 
@@ -16,14 +14,13 @@ suspend fun <T> shedlock(
     shedlock(name, lockAtMostFor.toJavaDuration(), resetLockUntilAfterComplete, block)
 }
 
-// TODO: 테스트 해야함
 suspend fun <T> shedlock(
     name: String,
     lockAtMostFor: java.time.Duration,
     resetLockUntilAfterComplete: Boolean = true,
     block: suspend () -> T,
 ) {
-    val redisLock = Redisson.create().getLock(SHEDLOCK_PREFIX + name)
+    val redisLock = RedissonClientHolder.redissonClient.getLock(SHEDLOCK_PREFIX + name)
 
     try {
         val isLocked =
