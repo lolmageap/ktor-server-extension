@@ -17,4 +17,9 @@ object Dependencies {
 
     const val LETTUCE_CORE = "io.lettuce:lettuce-core:${DependencyVersions.LETTUCE_VERSION}"
     const val REDISSON = "org.redisson:redisson:${DependencyVersions.REDISSON_VERSION}"
+
+    const val TEST_CONTAINERS_POSTGRESQL = "org.testcontainers:postgresql:${DependencyVersions.TEST_CONTAINERS_VERSION}"
+    const val TEST_CONTAINERS_JDBC = "org.testcontainers:jdbc:${DependencyVersions.TEST_CONTAINERS_VERSION}"
+    const val TEST_CONTAINERS_JUNIT_JUPITER = "org.testcontainers:junit-jupiter:${DependencyVersions.TEST_CONTAINERS_VERSION}"
+    const val TEST_CONTAINERS_KOTEST_EXTENSIONS = "io.kotest.extensions:kotest-extensions-testcontainers:${DependencyVersions.KOTEST_EXTENSIONS_VERSION}"
 }

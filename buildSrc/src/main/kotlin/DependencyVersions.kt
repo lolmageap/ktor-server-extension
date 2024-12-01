@@ -12,4 +12,7 @@ object DependencyVersions {
     const val CRON_UTILS_VERSION = "9.2.1"
     const val LETTUCE_VERSION = "6.5.0.RELEASE"
     const val REDISSON_VERSION = "3.39.0"
+
+    const val TEST_CONTAINERS_VERSION = "1.20.2"
+    const val KOTEST_EXTENSIONS_VERSION = "2.0.2"
 }

@@ -18,6 +18,10 @@ dependencies {
     testImplementation(Dependencies.KOTLIN_TEST_JUNIT)
     testImplementation(Dependencies.KOTEST_RUNNER_JUNIT5)
     testImplementation(Dependencies.KOTEST_ASSERTIONS_CORE)
+    testImplementation(Dependencies.TEST_CONTAINERS_POSTGRESQL)
+    testImplementation(Dependencies.TEST_CONTAINERS_JDBC)
+    testImplementation(Dependencies.TEST_CONTAINERS_JUNIT_JUPITER)
+    testImplementation(Dependencies.TEST_CONTAINERS_KOTEST_EXTENSIONS)
 }
 
 tasks.test {
