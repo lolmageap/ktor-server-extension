@@ -7,14 +7,29 @@ import com.cronutils.parser.CronParser
 import kotlinx.coroutines.*
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import kotlin.time.Duration
 
-fun <T> schedule(
+inline fun <T> schedule(
+    fixedRate: Duration,
+    crossinline block: suspend () -> T
+) = CoroutineScope(Dispatchers.Default).launch {
+    while (isActive) {
+        block()
+        delay(fixedRate)
+    }
+}
+
+inline fun <T> schedule(
     cron: String,
     cronType: CronType = CronType.QUARTZ,
-    block: suspend () -> T,
+    crossinline block: suspend () -> T,
 ) =
     CoroutineScope(Dispatchers.Default).launch {
-        val cronValue = cron.toCronValue(cronType)
+        val cronValue =
+            CronParser(
+                CronDefinitionBuilder.instanceDefinitionFor(cronType)
+            ).parse(cron)
+
         val executionTime = ExecutionTime.forCron(cronValue)
 
         while (isActive) {
@@ -30,10 +45,3 @@ fun <T> schedule(
             }
         }
     }
-
-private fun String.toCronValue(
-    cronType: CronType,
-) =
-    CronParser(
-        CronDefinitionBuilder.instanceDefinitionFor(cronType)
-    ).parse(this)
