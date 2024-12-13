@@ -50,6 +50,18 @@ fun Application.module() {
 }
 ```
 
+or
+
+```kotlin
+import kotlin.time.Duration.Companion.days
+
+fun Application.module() {
+    schedule(1.days) {
+        println("Hello, world!")
+    }
+}
+```
+
 ### Exposed Shedlock
 
 This extension offers an easy way to integrate ShedLock for managing distributed locks in the Ktor framework.
