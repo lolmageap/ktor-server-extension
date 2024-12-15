@@ -81,10 +81,10 @@ fun Application.module() {
 To use ShedLock, specify a lock name and a duration for how long the lock should be held.
 
 ```kotlin
+import kotlin.time.Duration.Companion.seconds
+
 fun Application.module() {
-    shedlock(
-        name = "shedlock", lockAtMostFor = 5.minutes,
-    ) {
+    shedlock(name = "shedlock", lockAtMostFor = 5.minutes) {
         println("Hello, world!")
     }
 }
@@ -94,24 +94,30 @@ or
 
 ```kotlin
 fun Application.module() {
-    shedlock(
-        name = "shedlock", lockAtMostFor = Duration.ofMinutes(5),
-    ) {
+    shedlock(name = "shedlock", lockAtMostFor = Duration.ofMinutes(5)) {
         println("Hello, world!")
     }
 }
 ```
 
-## TODO
+Additionally, there is an option called resetLockUntilAfterComplete that determines whether lockUntil should be reset after the lock is released. 
+The default value for this option is true.
 
-- [ ] Add Redis Shedlock To Redisson
-- [ ] Add Redis Distributed Lock To Redisson - SpinLock, RedLock
+```kotlin
+import kotlin.time.Duration.Companion.seconds
 
-### Redis Shedlock
+fun Application.module() {
+    shedlock(name = "shedlock", lockAtMostFor = 5.minutes, resetLockUntilAfterComplete = false) {
+        println("Hello, world!")
+    }
+}
+```
+
+### Redis Shedlock & Redis Distributed Lock
 
 #### Configuration
 
-Before using ShedLock, you need to create the necessary schema:
+Before using ShedLock, you need to initialize the Redisson client: 
 
 ```kotlin
 fun Application.module() {
@@ -119,14 +125,24 @@ fun Application.module() {
 }
 ```
 
+#### Usage Redis Shedlock
+
 ```kotlin
 fun Application.module() {
-    shedlock(
-        name = "shedlock", lockAtMostFor = 5.minutes,
-    ) {
+    shedlock(name = "shedlock", lockAtMostFor = 5.minutes) {
         println("Hello, world!")
     }
 }
 ```
 
-### Redis Distributed Lock
+#### Usage Redis Distributed Lock
+
+```kotlin
+import kotlin.time.Duration.Companion.seconds
+
+fun Application.module() {
+    distributedLock(name = "distributedLock", waitTime = 5.seconds, leaseTime = 1.seconds) {
+        println("Hello, world!")
+    }
+}
+```
