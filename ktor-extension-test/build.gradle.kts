@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":exposed-shedlock"))
     implementation(project(":redis-shedlock"))
 
+    testImplementation(Dependencies.REDISSON)
     testImplementation(Dependencies.LETTUCE_CORE)
     testImplementation(Dependencies.HIKARI_CP)
     testImplementation(Dependencies.POSTGRESQL)
