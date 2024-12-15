@@ -2,39 +2,43 @@ package extension.ktor.redis
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit.MILLISECONDS
+import java.time.Duration
 import kotlin.time.toJavaDuration
 
 suspend fun <T> shedlock(
     name: String,
     lockAtMostFor: kotlin.time.Duration,
-    resetLockUntilAfterComplete: Boolean = true,
     block: suspend () -> T,
 ) {
-    shedlock(name, lockAtMostFor.toJavaDuration(), resetLockUntilAfterComplete, block)
+    val redisKey = SHEDLOCK_PREFIX + name
+    val lockValue = System.currentTimeMillis().toString()
+
+    return withContext(Dispatchers.IO) {
+        val redisClient = RedissonClientHolder.redissonClient
+        val doNotHaveLock =
+            redisClient.getBucket<String>(redisKey).setIfAbsent(lockValue, lockAtMostFor.toJavaDuration()).not()
+
+        if (doNotHaveLock) throw AlreadyLockedException()
+
+        block.invoke()
+    }
 }
 
 suspend fun <T> shedlock(
     name: String,
-    lockAtMostFor: java.time.Duration,
-    resetLockUntilAfterComplete: Boolean = true,
-    block: suspend () -> T,
-) {
-    val redisLock = RedissonClientHolder.redissonClient.getLock(SHEDLOCK_PREFIX + name)
+    lockAtMostFor: Duration,
+    block: suspend () -> T
+): T {
+    val redisKey = SHEDLOCK_PREFIX + name
+    val lockValue = System.currentTimeMillis().toString()
 
-    try {
-        val isLocked =
-            withContext(Dispatchers.IO) {
-                redisLock.tryLockAsync(lockAtMostFor.toMillis(), MILLISECONDS).get()
-            }
+    return withContext(Dispatchers.IO) {
+        val redisClient = RedissonClientHolder.redissonClient
+        val doNotHaveLock = redisClient.getBucket<String>(redisKey).setIfAbsent(lockValue, lockAtMostFor).not()
 
-        if (isLocked) throw AlreadyLockedException()
+        if (doNotHaveLock) throw AlreadyLockedException()
+
         block.invoke()
-    } catch (e: Exception) {
-        redisLock.unlockAsync()
-        throw e
-    } finally {
-        if (resetLockUntilAfterComplete) redisLock.unlockAsync()
     }
 }
 

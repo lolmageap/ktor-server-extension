@@ -12,12 +12,13 @@ import kotlin.time.Duration
 inline fun <T> schedule(
     fixedRate: Duration,
     crossinline block: suspend () -> T
-) = CoroutineScope(Dispatchers.Default).launch {
-    while (isActive) {
-        block()
-        delay(fixedRate)
+) =
+    CoroutineScope(Dispatchers.Default).launch {
+        while (isActive) {
+            block()
+            delay(fixedRate)
+        }
     }
-}
 
 inline fun <T> schedule(
     cron: String,
