@@ -8,6 +8,7 @@ import kotlin.time.toJavaDuration
 suspend fun <T> shedlock(
     name: String,
     lockAtMostFor: kotlin.time.Duration,
+    resetLockUntilAfterComplete: Boolean = true,
     block: suspend () -> T,
 ) {
     val redisKey = SHEDLOCK_PREFIX + name
@@ -20,13 +21,16 @@ suspend fun <T> shedlock(
 
         if (doNotHaveLock) throw AlreadyLockedException()
 
-        block.invoke()
+        block.invoke().apply {
+            if (resetLockUntilAfterComplete) redisClient.getBucket<String>(redisKey).delete()
+        }
     }
 }
 
 suspend fun <T> shedlock(
     name: String,
     lockAtMostFor: Duration,
+    resetLockUntilAfterComplete: Boolean = true,
     block: suspend () -> T
 ): T {
     val redisKey = SHEDLOCK_PREFIX + name
@@ -38,7 +42,9 @@ suspend fun <T> shedlock(
 
         if (doNotHaveLock) throw AlreadyLockedException()
 
-        block.invoke()
+        block.invoke().apply {
+            if (resetLockUntilAfterComplete) redisClient.getBucket<String>(redisKey).delete()
+        }
     }
 }
 
