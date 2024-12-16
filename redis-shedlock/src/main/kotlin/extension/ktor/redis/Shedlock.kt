@@ -16,14 +16,14 @@ suspend fun <T> shedlock(
 
     return withContext(Dispatchers.IO) {
         val redisClient = RedissonClientHolder.redissonClient
-        val doNotHaveLock =
-            redisClient.getBucket<String>(redisKey).setIfAbsent(lockValue, lockAtMostFor.toJavaDuration()).not()
+        val hasLock =
+            redisClient.getBucket<String>(redisKey).setIfAbsent(lockValue, lockAtMostFor.toJavaDuration())
 
-        if (doNotHaveLock) throw AlreadyLockedException()
-
-        block.invoke().apply {
-            if (resetLockUntilAfterComplete) redisClient.getBucket<String>(redisKey).delete()
-        }
+        if (hasLock) {
+            block.invoke().apply {
+                if (resetLockUntilAfterComplete) redisClient.getBucket<String>(redisKey).delete()
+            }
+        } else throw AlreadyLockedException()
     }
 }
 
@@ -38,13 +38,13 @@ suspend fun <T> shedlock(
 
     return withContext(Dispatchers.IO) {
         val redisClient = RedissonClientHolder.redissonClient
-        val doNotHaveLock = redisClient.getBucket<String>(redisKey).setIfAbsent(lockValue, lockAtMostFor).not()
+        val hasLock = redisClient.getBucket<String>(redisKey).setIfAbsent(lockValue, lockAtMostFor)
 
-        if (doNotHaveLock) throw AlreadyLockedException()
-
-        block.invoke().apply {
-            if (resetLockUntilAfterComplete) redisClient.getBucket<String>(redisKey).delete()
-        }
+        if (hasLock) {
+            block.invoke().apply {
+                if (resetLockUntilAfterComplete) redisClient.getBucket<String>(redisKey).delete()
+            }
+        } else throw AlreadyLockedException()
     }
 }
 
