@@ -147,3 +147,9 @@ fun Application.module() {
     }
 }
 ```
+
+## TODO
+
+- [ ] Add Cacheable scope function
+- [ ] Add CacheLocking scope function
+- [ ] Add RateLimiter scope function
