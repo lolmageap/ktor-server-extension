@@ -31,7 +31,7 @@ suspend fun <T> shedlock(
     name: String,
     lockAtMostFor: Duration,
     resetLockUntilAfterComplete: Boolean = true,
-    block: suspend () -> T
+    block: suspend () -> T,
 ): T {
     val redisKey = SHEDLOCK_PREFIX + name
     val lockValue = System.currentTimeMillis().toString()

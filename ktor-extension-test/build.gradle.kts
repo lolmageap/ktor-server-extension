@@ -1,12 +1,18 @@
+import Module.SCHEDULER
+import Module.REDIS_CACHE
+import Module.REDIS_SHEDLOCK
+import Module.EXPOSED_SHEDLOCK
+
 plugins {
     kotlin(Plugins.JVM) version PluginVersions.JVM_VERSION
     id(Plugins.SHADOW_JAR) version PluginVersions.SHADOW_JAR_VERSION
 }
 
 dependencies {
-    implementation(project(":scheduler"))
-    implementation(project(":exposed-shedlock"))
-    implementation(project(":redis-shedlock"))
+    implementation(project(SCHEDULER))
+    implementation(project(REDIS_CACHE))
+    implementation(project(REDIS_SHEDLOCK))
+    implementation(project(EXPOSED_SHEDLOCK))
 
     testImplementation(Dependencies.REDISSON)
     testImplementation(Dependencies.LETTUCE_CORE)
