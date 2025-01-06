@@ -11,7 +11,7 @@ suspend fun <T> distributedLock(
     waitTime: kotlin.time.Duration,
     leaseTime: kotlin.time.Duration = 1.seconds,
     block: suspend () -> T,
-) {
+): T {
     val redisKey = DISTRIBUTED_LOCK_PREFIX + name
 
     return withContext(IO) {
