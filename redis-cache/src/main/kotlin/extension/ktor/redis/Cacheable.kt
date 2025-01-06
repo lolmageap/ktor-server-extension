@@ -5,7 +5,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
-// TODO : object mapper serialization and deserialization should be handled by the user
 suspend inline fun <reified T: Any> cacheable(
     key: String,
     ttl: Duration = 5.seconds,
@@ -29,5 +28,3 @@ suspend inline fun <reified T: Any> cacheable(
         redisClient.getBucket<String>(key).set(serializedValue, ttl.toJavaDuration())
     }
 }
-
-// TODO : Add cache locking mechanism
