@@ -101,7 +101,8 @@ fun Application.module() {
 }
 ```
 
-Additionally, there is an option called resetLockUntilAfterComplete that determines whether lockUntil should be reset after the lock is released. 
+Additionally, there is an option called resetLockUntilAfterComplete that determines whether lockUntil should be reset
+after the lock is released.
 The default value for this option is true.
 
 ```kotlin
@@ -114,15 +115,52 @@ fun Application.module() {
 }
 ```
 
-### Redis Shedlock & Redis Distributed Lock
+### Redis Cache & Redis Shedlock & Redis Distributed Lock
 
 #### Configuration
 
-Before using ShedLock, you need to initialize the Redisson client: 
+Before using ShedLock, you need to initialize the Redisson client:
 
 ```kotlin
 fun Application.module() {
     RedissonClientHolder.redissonClient = Redisson.create()
+}
+```
+
+You can configure serialization before you set up your Redis cache:
+
+```kotlin
+fun Application.module() {
+    RedisObjectMapper.objectMapper.apply {
+        enable(SerializationFeature.INDENT_OUTPUT)
+        disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+    }
+}
+```
+
+#### Usage Redis Cache
+
+cacheable stores data in the cache and retrieves the value from the cache if it exists. 
+If the cache is empty, the function executes, and the final value is stored in the cache.
+
+```kotlin
+fun Application.module() {
+    cacheable("cacheable", 5.minutes) {
+        Database.findAll()
+    }
+}
+```
+
+#### Usage Redis Cache with Lock
+
+cacheLocking is used to solve the cache stampede problem. 
+It utilizes a distributed lock to wait until the cache is populated and then retrieves the value from the cache once it is ready.
+
+```kotlin
+fun Application.module() {
+    cacheLocking("cacheLocking", 5.minutes) {
+        Database.findAll()
+    }
 }
 ```
 
@@ -150,6 +188,4 @@ fun Application.module() {
 
 ## TODO
 
-- [ ] Add Cacheable scope function
-- [ ] Add CacheLocking scope function
 - [ ] Add RateLimiter scope function
