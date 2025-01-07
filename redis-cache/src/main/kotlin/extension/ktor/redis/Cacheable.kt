@@ -1,18 +1,17 @@
 package extension.ktor.redis
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
-suspend inline fun <reified T: Any> cacheable(
+suspend inline fun <reified T : Any> cacheable(
     key: String,
     ttl: Duration = 5.seconds,
-    cacheHit: () -> Unit = {},
-    cacheMiss: () -> Unit = {},
-    block: () -> T,
+    noinline cacheHit: suspend () -> Unit = {},
+    noinline cacheMiss: suspend () -> Unit = {},
+    crossinline block: suspend () -> T,
 ): T {
-    val objectMapper = ObjectMapper()
+    val objectMapper = RedisObjectMapper.objectMapper
     val redisClient = RedissonClientHolder.redissonClient
     val data = redisClient.getBucket<String>(key).get()
 
