@@ -7,7 +7,7 @@ import kotlin.time.toJavaDuration
 
 suspend inline fun <reified T : Any> cacheLocking(
     key: String,
-    ttl: kotlin.time.Duration = 5.seconds,
+    ttl: kotlin.time.Duration,
     crossinline block: suspend () -> T,
 ): T {
     val objectMapper = RedisObjectMapper.objectMapper
@@ -33,7 +33,7 @@ suspend inline fun <reified T : Any> cacheLocking(
 
 suspend inline fun <reified T : Any> cacheLocking(
     key: String,
-    ttl: java.time.Duration = java.time.Duration.ofSeconds(5),
+    ttl: java.time.Duration,
     crossinline block: suspend () -> T,
 ): T {
     val objectMapper = RedisObjectMapper.objectMapper
