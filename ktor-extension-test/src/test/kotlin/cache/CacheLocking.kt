@@ -8,7 +8,7 @@ import io.lettuce.core.api.async.RedisAsyncCommands
 import org.redisson.Redisson
 import org.redisson.config.Config
 
-class CacheableTest : StringSpec({
+class CacheLockingTest : StringSpec({
     lateinit var redisClient: RedisAsyncCommands<String, String>
     val database = mutableMapOf<String, String>()
 
@@ -33,7 +33,7 @@ class CacheableTest : StringSpec({
         RedissonClientHolder.redissonClient.keys.flushall()
     }
 
-    "cacheable test" {
+    "cache locking test" {
 
     }
 })
