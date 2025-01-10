@@ -46,6 +46,30 @@ class CacheableTest : StringSpec({
         database[key] = "value"
         var number = 0
 
+        val data =
+            cacheable(key, 5.seconds) {
+                number++
+                database.find(key)
+            }
+
+        data shouldBe database.getValue(key)
+
+        val data2 =
+            cacheable(key, 5.seconds) {
+                number++
+                database.find(key)
+            }
+
+        data2 shouldBe database.getValue(key)
+
+        number shouldBe 1
+    }
+
+    "cache stampede failure test" {
+        val key = "key"
+        database[key] = "value"
+        var number = 0
+
         (0..10).map {
             async {
                 val data =
