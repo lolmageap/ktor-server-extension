@@ -8,6 +8,7 @@ import kotlin.time.toJavaDuration
 suspend inline fun <reified T : Any> cacheLocking(
     key: String,
     ttl: kotlin.time.Duration,
+    leaseTime: kotlin.time.Duration = 3.seconds,
     crossinline block: suspend () -> T,
 ): T {
     val objectMapper = RedisObjectMapper.objectMapper
@@ -17,7 +18,7 @@ suspend inline fun <reified T : Any> cacheLocking(
     return if (data != null) {
         objectMapper.readValue(data, T::class.java) as T
     } else withContext(IO) {
-        distributedLock(key, 1.seconds, ttl) {
+        distributedLock(key, leaseTime, ttl) {
             val doubleCheckedValue = redisClient.getBucket<String>(key).get()
             if (doubleCheckedValue != null) {
                 return@distributedLock objectMapper.readValue(doubleCheckedValue, T::class.java) as T
@@ -25,7 +26,7 @@ suspend inline fun <reified T : Any> cacheLocking(
 
             block.invoke().also { value ->
                 val serializedValue = objectMapper.writeValueAsString(value)
-                redisClient.getBucket<String>(key).set(serializedValue, ttl.toJavaDuration())
+                redisClient.getBucket<String>(key).setIfAbsent(serializedValue, ttl.toJavaDuration())
             }
         }
     }
@@ -34,6 +35,7 @@ suspend inline fun <reified T : Any> cacheLocking(
 suspend inline fun <reified T : Any> cacheLocking(
     key: String,
     ttl: java.time.Duration,
+    leaseTime: java.time.Duration = java.time.Duration.ofSeconds(3),
     crossinline block: suspend () -> T,
 ): T {
     val objectMapper = RedisObjectMapper.objectMapper
@@ -43,7 +45,7 @@ suspend inline fun <reified T : Any> cacheLocking(
     return if (data != null) {
         objectMapper.readValue(data, T::class.java) as T
     } else withContext(IO) {
-        distributedLock(key, java.time.Duration.ofSeconds(1), ttl) {
+        distributedLock(key, leaseTime, ttl) {
             val doubleCheckedValue = redisClient.getBucket<String>(key).get()
             if (doubleCheckedValue != null) {
                 return@distributedLock objectMapper.readValue(doubleCheckedValue, T::class.java) as T
@@ -51,7 +53,7 @@ suspend inline fun <reified T : Any> cacheLocking(
 
             block.invoke().also { value ->
                 val serializedValue = objectMapper.writeValueAsString(value)
-                redisClient.getBucket<String>(key).set(serializedValue, ttl)
+                redisClient.getBucket<String>(key).setIfAbsent(serializedValue, ttl)
             }
         }
     }
