@@ -9,7 +9,7 @@ import kotlin.time.toJavaDuration
 suspend fun <T> distributedLock(
     name: String,
     waitTime: kotlin.time.Duration,
-    leaseTime: kotlin.time.Duration = 1.seconds,
+    leaseTime: kotlin.time.Duration = 3.seconds,
     block: suspend () -> T,
 ): T {
     val redisKey = DISTRIBUTED_LOCK_PREFIX + name
@@ -36,7 +36,7 @@ suspend fun <T> distributedLock(
 suspend fun <T> distributedLock(
     name: String,
     waitTime: java.time.Duration,
-    leaseTime: java.time.Duration,
+    leaseTime: java.time.Duration = java.time.Duration.ofSeconds(3),
     block: suspend () -> T,
 ): T {
     val redisKey = DISTRIBUTED_LOCK_PREFIX + name
