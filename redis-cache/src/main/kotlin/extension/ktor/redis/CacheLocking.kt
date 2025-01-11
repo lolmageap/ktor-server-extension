@@ -2,6 +2,7 @@ package extension.ktor.redis
 
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
+import java.util.*
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
@@ -18,7 +19,7 @@ suspend inline fun <reified T : Any> cacheLocking(
     return if (data != null) {
         objectMapper.readValue(data, T::class.java) as T
     } else withContext(IO) {
-        distributedLock(key, leaseTime, ttl) {
+        distributedLock(MANGLING_PREFIX + key, leaseTime, ttl) {
             val doubleCheckedValue = redisClient.getBucket<String>(key).get()
             if (doubleCheckedValue != null) {
                 return@distributedLock objectMapper.readValue(doubleCheckedValue, T::class.java) as T
@@ -45,7 +46,7 @@ suspend inline fun <reified T : Any> cacheLocking(
     return if (data != null) {
         objectMapper.readValue(data, T::class.java) as T
     } else withContext(IO) {
-        distributedLock(key, leaseTime, ttl) {
+        distributedLock(MANGLING_PREFIX + key, leaseTime, ttl) {
             val doubleCheckedValue = redisClient.getBucket<String>(key).get()
             if (doubleCheckedValue != null) {
                 return@distributedLock objectMapper.readValue(doubleCheckedValue, T::class.java) as T
@@ -58,3 +59,5 @@ suspend inline fun <reified T : Any> cacheLocking(
         }
     }
 }
+
+val MANGLING_PREFIX = "distributed-lock:${UUID.randomUUID()}"
