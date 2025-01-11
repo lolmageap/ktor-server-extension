@@ -84,6 +84,34 @@ class CacheableTest : StringSpec({
 
         number shouldBeGreaterThan 1
     }
+
+    "cache lease test" {
+        val key = "key"
+        database[key] = "value"
+        var number = 0
+
+        val data =
+            cacheable(key, 1.seconds, cacheMiss = {
+                number++
+            }) {
+                database.find(key)
+            }
+
+        data shouldBe database.getValue(key)
+        number shouldBe 1
+
+        delay(2.seconds)
+
+        val data2 =
+            cacheable(key, 5.seconds, cacheMiss = {
+                number++
+            }) {
+                database.find(key)
+            }
+
+        data2 shouldBe database.getValue(key)
+        number shouldBe 2
+    }
 })
 
 private val database = mutableMapOf<String, String>()

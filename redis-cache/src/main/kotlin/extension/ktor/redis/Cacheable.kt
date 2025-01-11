@@ -1,6 +1,5 @@
 package extension.ktor.redis
 
-import extension.ktor.redis.RedisObjectMapper.objectMapper
 import kotlin.time.toJavaDuration
 
 suspend inline fun <reified T : Any> cacheable(
@@ -10,7 +9,7 @@ suspend inline fun <reified T : Any> cacheable(
     noinline cacheMiss: suspend () -> Unit = {},
     crossinline block: suspend () -> T,
 ): T {
-    val objectMapper = objectMapper
+    val objectMapper = RedisObjectMapper.objectMapper
     val redisClient = RedissonClientHolder.redissonClient
     val data = redisClient.getBucket<String>(key).get()
 
@@ -34,7 +33,7 @@ suspend inline fun <reified T : Any> cacheable(
     noinline cacheMiss: suspend () -> Unit = {},
     crossinline block: suspend () -> T,
 ): T {
-    val objectMapper = objectMapper
+    val objectMapper = RedisObjectMapper.objectMapper
     val redisClient = RedissonClientHolder.redissonClient
     val data = redisClient.getBucket<String>(key).get()
 
