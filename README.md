@@ -145,9 +145,11 @@ If the cache is empty, the function executes, and the final value is stored in t
 
 ```kotlin
 fun Application.module() {
-    cacheable("cacheable", 5.minutes) {
+    val values = cacheable("cacheable", 5.minutes) {
         Database.findAll()
     }
+    
+    println(values)
 }
 ```
 
@@ -158,9 +160,11 @@ It utilizes a distributed lock to wait until the cache is populated and then ret
 
 ```kotlin
 fun Application.module() {
-    cacheLocking("cacheLocking", 5.minutes) {
+    val values = cacheLocking("cacheLocking", 5.minutes) {
         Database.findAll()
     }
+    
+    println(values)
 }
 ```
 
