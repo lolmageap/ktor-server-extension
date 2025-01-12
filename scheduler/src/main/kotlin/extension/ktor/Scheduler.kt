@@ -7,18 +7,33 @@ import com.cronutils.parser.CronParser
 import kotlinx.coroutines.*
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import kotlin.time.Duration
 
 inline fun <T> schedule(
-    fixedRate: Duration,
-    crossinline block: suspend () -> T
-) =
-    CoroutineScope(Dispatchers.Default).launch {
-        while (isActive) {
-            block()
-            delay(fixedRate)
+    fixedRate: kotlin.time.Duration? = null,
+    fixedDelay: kotlin.time.Duration? = null,
+    crossinline block: suspend () -> T,
+) {
+    if (fixedRate == null && fixedDelay == null) throw IllegalArgumentException("fixedRate or fixedDelay must be provided")
+    if (fixedRate != null && fixedDelay != null) throw IllegalArgumentException("fixedRate and fixedDelay cannot be provided at the same time")
+
+    if (fixedRate != null) {
+        CoroutineScope(Dispatchers.Default).launch {
+            while (isActive) {
+                launch { block.invoke() }
+                delay(fixedRate)
+            }
         }
     }
+
+    if (fixedDelay != null) {
+        CoroutineScope(Dispatchers.Default).launch {
+            while (isActive) {
+                block.invoke()
+                delay(fixedDelay)
+            }
+        }
+    }
+}
 
 inline fun <T> schedule(
     cron: String,
