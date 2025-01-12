@@ -57,7 +57,19 @@ or
 import kotlin.time.Duration.Companion.days
 
 fun Application.module() {
-    schedule(1.days) {
+    schedule(fixedRate = 1.days) {
+        println("Hello, world!")
+    }
+}
+```
+
+or
+
+```kotlin
+import kotlin.time.Duration.Companion.days
+
+fun Application.module() {
+    schedule(fixedDelay = 1.days) {
         println("Hello, world!")
     }
 }
