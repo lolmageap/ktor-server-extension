@@ -1,5 +1,6 @@
 package extension.ktor.redis
 
+import org.redisson.api.RRateLimiter
 import org.redisson.api.RateType
 import kotlin.time.toJavaDuration
 
@@ -12,9 +13,10 @@ suspend fun <T> rateLimiter(
     val redisClient = RedissonClientHolder.redissonClient
 
     val rateLimiter = redisClient.getRateLimiter(key)
-    val isRateLimited = rateLimiter.trySetRate(RateType.OVERALL, limit, period.toJavaDuration())
 
-    if (isRateLimited) throw RateLimitExceededException()
+    if (rateLimiter.isNotExists) rateLimiter.trySetRate(RateType.OVERALL, limit, period.toJavaDuration())
+    if (rateLimiter.notAcquired) throw RateLimitExceededException()
+
     return block()
 }
 
@@ -24,15 +26,23 @@ suspend fun <T> rateLimiter(
     period: java.time.Duration,
     block: suspend () -> T,
 ): T {
+
     val redisClient = RedissonClientHolder.redissonClient
 
     val rateLimiter = redisClient.getRateLimiter(key)
-    val isRateLimited = rateLimiter.trySetRate(RateType.OVERALL, limit, period)
 
-    if (isRateLimited) throw RateLimitExceededException()
+    if (rateLimiter.isNotExists) rateLimiter.trySetRate(RateType.OVERALL, limit, period)
+    if (rateLimiter.notAcquired) throw RateLimitExceededException()
+
     return block()
 }
 
 data class RateLimitExceededException(
     override val message: String = "Rate limit exceeded",
 ) : RuntimeException(message)
+
+val RRateLimiter.isNotExists: Boolean
+    get() = isExists.not()
+
+val RRateLimiter.notAcquired: Boolean
+    get() = tryAcquire().not()
