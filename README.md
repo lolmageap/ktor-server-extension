@@ -192,6 +192,10 @@ fun Application.module() {
 
 #### Usage Redis Distributed Lock
 
+to use distributed lock, you need to specify the name of the lock, the waiting time, and the lease time.  
+The waiting time is the maximum time the lock will wait to acquire the lock.
+The lease time is the maximum time the lock will be held.
+
 ```kotlin
 import kotlin.time.Duration.Companion.seconds
 
@@ -202,6 +206,17 @@ fun Application.module() {
 }
 ```
 
-## TODO
+#### Usage Redis Rate Limiter
 
-- [ ] Add RateLimiter scope function
+to use rate limiter, you need to specify the name of the rate limiter, the limit, and the duration.
+The limit is the maximum number of requests allowed within the duration.
+
+```kotlin
+import kotlin.time.Duration.Companion.seconds
+
+fun Application.module() {
+    rateLimiter(name = "rateLimiter", limit = 10_000, duration = 10.seconds) {
+        println("Hello, world!")
+    }
+}
+```
