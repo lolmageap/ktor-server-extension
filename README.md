@@ -17,13 +17,14 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.lolmageap.ktor-server-extension:scheduler:1.0.3")
-    implementation("com.github.lolmageap.ktor-server-extension:exposed-shedlock:1.0.3")
-    implementation("com.github.lolmageap.ktor-server-extension:redis-shedlock:1.0.3")
+    implementation("com.github.lolmageap.ktor-server-extension:scheduler:1.0.4")
+    implementation("com.github.lolmageap.ktor-server-extension:exposed-shedlock:1.0.4")
+    implementation("com.github.lolmageap.ktor-server-extension:redis-shedlock:1.0.4")
+    implementation("com.github.lolmageap.ktor-server-extension:redis-cache:1.0.4")
 }
 ```
 
-## Usage
+## Usage ShedLock & Scheduler
 
 By combining the scheduler with ShedLock, you can ensure safe execution in a scale-out environment.
 ShedLock guarantees that scheduled tasks will run only once across multiple instances, preventing race conditions or
@@ -127,9 +128,9 @@ fun Application.module() {
 }
 ```
 
-### Redis Cache & Redis Shedlock & Redis Distributed Lock
+## Redis
 
-#### Configuration
+### Configuration
 
 Before using ShedLock, you need to initialize the Redisson client:
 
@@ -150,7 +151,19 @@ fun Application.module() {
 }
 ```
 
-#### Usage Redis Cache
+## Usage Redis Shedlock
+
+```kotlin
+fun Application.module() {
+    shedlock(name = "shedlock", lockAtMostFor = 5.minutes) {
+        println("Hello, world!")
+    }
+}
+```
+
+## Redis Cache
+
+### Usage Redis Cache
 
 cacheable stores data in the cache and retrieves the value from the cache if it exists. 
 If the cache is empty, the function executes, and the final value is stored in the cache.
@@ -165,7 +178,7 @@ fun Application.module() {
 }
 ```
 
-#### Usage Redis Cache with Lock
+### Usage Redis Cache Lock
 
 cacheLocking is used to solve the cache stampede problem. 
 It utilizes a distributed lock to wait until the cache is populated and then retrieves the value from the cache once it is ready.
@@ -180,17 +193,7 @@ fun Application.module() {
 }
 ```
 
-#### Usage Redis Shedlock
-
-```kotlin
-fun Application.module() {
-    shedlock(name = "shedlock", lockAtMostFor = 5.minutes) {
-        println("Hello, world!")
-    }
-}
-```
-
-#### Usage Redis Distributed Lock
+### Usage Redis Distributed Lock
 
 to use distributed lock, you need to specify the name of the lock, the waiting time, and the lease time.  
 The waiting time is the maximum time the lock will wait to acquire the lock.
@@ -206,7 +209,7 @@ fun Application.module() {
 }
 ```
 
-#### Usage Redis Rate Limiter
+### Usage Redis Rate Limiter
 
 to use rate limiter, you need to specify the name of the rate limiter, the limit, and the duration.
 The limit is the maximum number of requests allowed within the duration.
