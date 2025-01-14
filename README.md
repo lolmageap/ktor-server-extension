@@ -132,6 +132,15 @@ fun Application.module() {
 
 ### Configuration
 
+Before using Redis, you need to add the following dependencies to your build.gradle.kts file:
+
+```kotlin
+dependencies {
+    implementation("org.redisson:redisson:$redissonVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+}
+```
+
 Before using ShedLock, you need to initialize the Redisson client:
 
 ```kotlin
