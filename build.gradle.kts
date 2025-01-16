@@ -58,8 +58,10 @@ subprojects {
     }
 
     tasks {
-        jar {
-            enabled = false
+        if (project.name != "redis-common") {
+            jar {
+                enabled = false
+            }
         }
 
         shadowJar {
@@ -74,4 +76,8 @@ subprojects {
             dependsOn(shadowJar)
         }
     }
+//
+//    tasks.register("compileModules") {
+//        dependsOn(":redis-common:jar", ":redis-shedlock:compileKotlin", ":redis-cache:compileKotlin")
+//    }
 }
