@@ -11,10 +11,8 @@ import io.lettuce.core.api.async.RedisAsyncCommands
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.redisson.Redisson
 import org.redisson.config.Config
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.Duration.Companion.seconds
 
 class CacheableTest : StringSpec({

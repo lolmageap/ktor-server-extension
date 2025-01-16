@@ -3,7 +3,6 @@ package cache
 import extension.ktor.redis.RedissonClientHolder
 import extension.ktor.redis.cacheLocking
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.lettuce.core.RedisClient
 import io.lettuce.core.RedisURI

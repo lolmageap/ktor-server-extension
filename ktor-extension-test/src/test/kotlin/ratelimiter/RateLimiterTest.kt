@@ -1,9 +1,7 @@
 package ratelimiter
 
-import extension.ktor.redis.RateLimitExceededException
 import extension.ktor.redis.RedissonClientHolder
 import extension.ktor.redis.rateLimiter
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.lettuce.core.RedisClient
@@ -11,7 +9,6 @@ import io.lettuce.core.RedisURI
 import io.lettuce.core.api.async.RedisAsyncCommands
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
 import org.redisson.Redisson
 import org.redisson.config.Config
 import java.util.concurrent.atomic.AtomicInteger
