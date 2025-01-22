@@ -1,0 +1,95 @@
+package extension.ktor.protection
+
+import extension.ktor.protection.CircuitBreakerState.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.time.Instant
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+
+val circuitBreakers = ConcurrentHashMap<String, CircuitBreaker>()
+
+sealed class CircuitBreakerState {
+    data object Closed : CircuitBreakerState()
+    data object HalfOpen : CircuitBreakerState()
+    data class Open(val openedAt: Instant) : CircuitBreakerState()
+}
+
+data class CircuitBreaker(
+    val failureCount: AtomicInteger = AtomicInteger(0),
+    val state: AtomicReference<CircuitBreakerState> = AtomicReference(Closed),
+    val failureThreshold: Int,
+    val resetTimeout: Duration,
+)
+
+suspend fun <T> circuitBreaker(
+    key: String,
+    failureThreshold: Int = 10,
+    resetTimeout: Duration = 5.seconds,
+    block: suspend () -> T,
+): T {
+    val breaker = circuitBreakers.computeIfAbsent(key) {
+        CircuitBreaker(
+            failureThreshold = failureThreshold,
+            resetTimeout = resetTimeout,
+        )
+    }
+
+    return withContext(Dispatchers.IO) {
+        when (val currentState = breaker.state.get()) {
+            is Closed -> breaker.executeInClosed(block)
+
+            is Open -> {
+                val closedDuration = Instant.now().toEpochMilli() - currentState.openedAt.toEpochMilli()
+
+                if (closedDuration.milliseconds >= breaker.resetTimeout) {
+                    breaker.state.set(HalfOpen)
+                    breaker.executeInHalfOpen(block)
+                } else {
+                    throw CircuitBreakerOpenException("Circuit breaker is open for key: $key")
+                }
+            }
+
+            is HalfOpen -> breaker.executeInHalfOpen(block)
+        }
+    }
+}
+
+private suspend fun <T> CircuitBreaker.executeInClosed(
+    block: suspend () -> T,
+) =
+    try {
+        val result = block.invoke()
+        this.reset()
+        result
+    } catch (e: Exception) {
+        if (this.failureCount.incrementAndGet() >= this.failureThreshold) {
+            this.openCircuit()
+        }
+        throw e
+    }
+
+private suspend fun <T> CircuitBreaker.executeInHalfOpen(
+    block: suspend () -> T,
+) =
+    try {
+        val result = block.invoke()
+        this.reset()
+        result
+    } catch (e: Exception) {
+        this.openCircuit()
+        throw e
+    }
+
+private fun CircuitBreaker.openCircuit() {
+    this.state.set(Open(Instant.now()))
+}
+
+private fun CircuitBreaker.reset() {
+    this.state.set(Closed)
+    this.failureCount.set(0)
+}
