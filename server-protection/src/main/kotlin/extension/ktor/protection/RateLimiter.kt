@@ -9,3 +9,13 @@ suspend fun <T> rateLimiter(
     TODO("Not implemented yet")
     block()
 }
+
+suspend fun <T> rateLimiter(
+    key: String,
+    limit: Long,
+    period: java.time.Duration,
+    block: suspend () -> T,
+) {
+    TODO()
+    block()
+}
