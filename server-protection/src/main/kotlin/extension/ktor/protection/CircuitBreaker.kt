@@ -7,9 +7,9 @@ import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toKotlinDuration
 
 val circuitBreakers = ConcurrentHashMap<String, CircuitBreaker>()
 
@@ -23,13 +23,58 @@ data class CircuitBreaker(
     val failureCount: AtomicInteger = AtomicInteger(0),
     val state: AtomicReference<CircuitBreakerState> = AtomicReference(Closed),
     val failureThreshold: Int,
-    val resetTimeout: Duration,
-)
+    val resetTimeout: kotlin.time.Duration,
+) {
+    constructor(
+        failureCount: AtomicInteger = AtomicInteger(0),
+        state: AtomicReference<CircuitBreakerState> = AtomicReference(Closed),
+        failureThreshold: Int,
+        resetTimeout: java.time.Duration,
+    ) : this(
+        failureCount = failureCount,
+        state = state,
+        failureThreshold = failureThreshold,
+        resetTimeout = resetTimeout.toKotlinDuration(),
+    )
+}
 
 suspend fun <T> circuitBreaker(
     key: String,
     failureThreshold: Int = 10,
-    resetTimeout: Duration = 5.seconds,
+    resetTimeout: kotlin.time.Duration = 5.seconds,
+    block: suspend () -> T,
+): T {
+    val breaker = circuitBreakers.computeIfAbsent(key) {
+        CircuitBreaker(
+            failureThreshold = failureThreshold,
+            resetTimeout = resetTimeout,
+        )
+    }
+
+    return withContext(Dispatchers.IO) {
+        when (val currentState = breaker.state.get()) {
+            is Closed -> breaker.executeInClosed(block)
+
+            is Open -> {
+                val closedDuration = Instant.now().toEpochMilli() - currentState.openedAt.toEpochMilli()
+
+                if (closedDuration.milliseconds >= breaker.resetTimeout) {
+                    breaker.state.set(HalfOpen)
+                    breaker.executeInHalfOpen(block)
+                } else {
+                    throw CircuitBreakerOpenException("Circuit breaker is open for key: $key")
+                }
+            }
+
+            is HalfOpen -> breaker.executeInHalfOpen(block)
+        }
+    }
+}
+
+suspend fun <T> circuitBreaker(
+    key: String,
+    failureThreshold: Int = 10,
+    resetTimeout: java.time.Duration = java.time.Duration.ofSeconds(5),
     block: suspend () -> T,
 ): T {
     val breaker = circuitBreakers.computeIfAbsent(key) {
