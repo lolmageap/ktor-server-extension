@@ -1,4 +1,4 @@
-package ratelimiter
+package redisratelimiter
 
 import extension.ktor.redis.RedissonClientHolder
 import extension.ktor.redis.rateLimiter
@@ -14,7 +14,7 @@ import org.redisson.config.Config
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.Duration.Companion.seconds
 
-class RateLimiterTest : StringSpec({
+class RedisRateLimiterTest : StringSpec({
     lateinit var redisClient: RedisAsyncCommands<String, String>
 
     beforeTest {
