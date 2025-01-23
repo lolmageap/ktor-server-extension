@@ -1,8 +1,6 @@
 package extension.ktor.protection
 
 import extension.ktor.protection.CircuitBreakerState.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
@@ -51,23 +49,21 @@ suspend fun <T> circuitBreaker(
         )
     }
 
-    return withContext(Dispatchers.IO) {
-        when (val currentState = breaker.state.get()) {
-            is Closed -> breaker.executeInClosed(block)
+    return when (val currentState = breaker.state.get()) {
+        is Closed -> breaker.executeInClosed(block)
 
-            is Open -> {
-                val closedDuration = Instant.now().toEpochMilli() - currentState.openedAt.toEpochMilli()
+        is Open -> {
+            val closedDuration = Instant.now().toEpochMilli() - currentState.openedAt.toEpochMilli()
 
-                if (closedDuration.milliseconds >= breaker.resetTimeout) {
-                    breaker.state.set(HalfOpen)
-                    breaker.executeInHalfOpen(block)
-                } else {
-                    throw CircuitBreakerOpenException("Circuit breaker is open for key: $key")
-                }
+            if (closedDuration.milliseconds >= breaker.resetTimeout) {
+                breaker.state.set(HalfOpen)
+                breaker.executeInHalfOpen(block)
+            } else {
+                throw CircuitBreakerOpenException(key)
             }
-
-            is HalfOpen -> breaker.executeInHalfOpen(block)
         }
+
+        is HalfOpen -> breaker.executeInHalfOpen(block)
     }
 }
 
@@ -84,23 +80,21 @@ suspend fun <T> circuitBreaker(
         )
     }
 
-    return withContext(Dispatchers.IO) {
-        when (val currentState = breaker.state.get()) {
-            is Closed -> breaker.executeInClosed(block)
+    return when (val currentState = breaker.state.get()) {
+        is Closed -> breaker.executeInClosed(block)
 
-            is Open -> {
-                val closedDuration = Instant.now().toEpochMilli() - currentState.openedAt.toEpochMilli()
+        is Open -> {
+            val closedDuration = Instant.now().toEpochMilli() - currentState.openedAt.toEpochMilli()
 
-                if (closedDuration.milliseconds >= breaker.resetTimeout) {
-                    breaker.state.set(HalfOpen)
-                    breaker.executeInHalfOpen(block)
-                } else {
-                    throw CircuitBreakerOpenException("Circuit breaker is open for key: $key")
-                }
+            if (closedDuration.milliseconds >= breaker.resetTimeout) {
+                breaker.state.set(HalfOpen)
+                breaker.executeInHalfOpen(block)
+            } else {
+                throw CircuitBreakerOpenException(key)
             }
-
-            is HalfOpen -> breaker.executeInHalfOpen(block)
         }
+
+        is HalfOpen -> breaker.executeInHalfOpen(block)
     }
 }
 
