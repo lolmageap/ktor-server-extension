@@ -5,6 +5,9 @@ object Dependencies {
     const val KOTEST_RUNNER_JUNIT5 = "io.kotest:kotest-runner-junit5:${DependencyVersions.JUNIT_VERSION}"
     const val KOTEST_ASSERTIONS_CORE = "io.kotest:kotest-assertions-core:${DependencyVersions.JUNIT_VERSION}"
 
+    const val KTOR_CLIENT_CIO = "io.ktor:ktor-client-cio-jvm"
+    const val KTOR_CLIENT_CONTENT_NEGOTIATION = "io.ktor:ktor-client-content-negotiation-jvm"
+
     const val EXPOSED_CORE = "org.jetbrains.exposed:exposed-core:${DependencyVersions.EXPOSED_VERSION}"
     const val EXPOSED_DAO = "org.jetbrains.exposed:exposed-dao:${DependencyVersions.EXPOSED_VERSION}"
     const val EXPOSED_JDBC = "org.jetbrains.exposed:exposed-jdbc:${DependencyVersions.EXPOSED_VERSION}"
