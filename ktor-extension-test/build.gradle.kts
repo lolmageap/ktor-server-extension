@@ -1,7 +1,9 @@
-import Module.SCHEDULER
+import Module.EXPOSED_SHEDLOCK
+import Module.HTTP_CLIENT
 import Module.REDIS_CACHE
 import Module.REDIS_SHEDLOCK
-import Module.EXPOSED_SHEDLOCK
+import Module.SCHEDULER
+import Module.SERVER_PROTECTION
 
 plugins {
     kotlin(Plugins.JVM) version PluginVersions.JVM_VERSION
@@ -10,9 +12,11 @@ plugins {
 
 dependencies {
     implementation(project(SCHEDULER))
+    implementation(project(HTTP_CLIENT))
     implementation(project(REDIS_CACHE))
     implementation(project(REDIS_SHEDLOCK))
     implementation(project(EXPOSED_SHEDLOCK))
+    implementation(project(SERVER_PROTECTION))
 
     testImplementation(Dependencies.REDISSON)
     testImplementation(Dependencies.LETTUCE_CORE)
