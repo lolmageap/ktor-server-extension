@@ -16,6 +16,7 @@ dependencies {
 
     testImplementation(Dependencies.REDISSON)
     testImplementation(Dependencies.LETTUCE_CORE)
+    testImplementation(Dependencies.KOTLIN_COROUTINES)
     testImplementation(Dependencies.HIKARI_CP)
     testImplementation(Dependencies.POSTGRESQL)
     testImplementation(Dependencies.EXPOSED_DAO)
@@ -23,6 +24,7 @@ dependencies {
     testImplementation(Dependencies.EXPOSED_CORE)
     testImplementation(Dependencies.EXPOSED_JAVA_TIME)
     testImplementation(Dependencies.KOTLIN_TEST_JUNIT)
+    testImplementation(Dependencies.TEST_MOCKK)
     testImplementation(Dependencies.KOTEST_RUNNER_JUNIT5)
     testImplementation(Dependencies.KOTEST_ASSERTIONS_CORE)
     testImplementation(Dependencies.TEST_CONTAINERS_POSTGRESQL)

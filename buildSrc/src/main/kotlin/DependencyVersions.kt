@@ -15,4 +15,5 @@ object DependencyVersions {
 
     const val TEST_CONTAINERS_VERSION = "1.20.2"
     const val KOTEST_EXTENSIONS_VERSION = "2.0.2"
+    const val TEST_MOCKK_VERSION = "4.0.2"
 }
