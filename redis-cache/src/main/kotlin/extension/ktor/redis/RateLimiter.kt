@@ -37,12 +37,8 @@ suspend fun <T> rateLimiter(
     return block()
 }
 
-data class RateLimitExceededException(
-    override val message: String = "Rate limit exceeded",
-) : RuntimeException(message)
-
-val RRateLimiter.isNotExists: Boolean
+private val RRateLimiter.isNotExists: Boolean
     get() = isExists.not()
 
-val RRateLimiter.notAcquired: Boolean
+private val RRateLimiter.notAcquired: Boolean
     get() = tryAcquire().not()
