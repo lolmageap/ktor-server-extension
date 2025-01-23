@@ -3,7 +3,6 @@ package extension.ktor.protection
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.time.ZonedDateTime
-import kotlin.time.toKotlinDuration
 
 private val rateLimiterMap = mutableMapOf<String, RateLimiter>()
 private val mutex = Mutex()
@@ -51,7 +50,7 @@ suspend fun <T> rateLimiter(
 
         val rateLimiter = rateLimiterMap.getValue(key)
 
-        val isExpired = now - rateLimiter.startUpTime > period.toKotlinDuration().inWholeMilliseconds
+        val isExpired = now - rateLimiter.startUpTime > period.toMillis()
         if (isExpired) rateLimiterMap[key] = RateLimiter(now, 1)
 
         if (rateLimiter.count >= limit) {
