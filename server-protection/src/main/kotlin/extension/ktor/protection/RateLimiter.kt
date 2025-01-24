@@ -28,10 +28,9 @@ suspend fun <T> rateLimiter(
         val isExpired = now - rateLimiter.startUpTime > period.inWholeMilliseconds
         if (isExpired) rateLimiterMap[key] = RateLimiter(now, 1)
 
-        if (rateLimiter.count >= limit) {
-            rateLimiterMap[key] = rateLimiter.copy(count = rateLimiter.count + 1)
-            throw RateLimitExceededException()
-        }
+        rateLimiterMap[key] = rateLimiter.copy(count = rateLimiter.count + 1)
+
+        if (rateLimiter.count > limit) throw RateLimitExceededException()
     }
 
     block()
@@ -53,10 +52,9 @@ suspend fun <T> rateLimiter(
         val isExpired = now - rateLimiter.startUpTime > period.toMillis()
         if (isExpired) rateLimiterMap[key] = RateLimiter(now, 1)
 
-        if (rateLimiter.count >= limit) {
-            rateLimiterMap[key] = rateLimiter.copy(count = rateLimiter.count + 1)
-            throw RateLimitExceededException()
-        }
+        rateLimiterMap[key] = rateLimiter.copy(count = rateLimiter.count + 1)
+
+        if (rateLimiter.count > limit) throw RateLimitExceededException()
     }
 
     block()
